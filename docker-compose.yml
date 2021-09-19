@@ -25,3 +25,11 @@ services:
       - "./data-mssql:/var/opt/mssql/data"
     ports:
         - 5050:1433
+  recipebook.app:
+    container_name: app
+    hostname: app
+    image: ${DOCKER_REGISTRY-}recipebookapp
+    build:
+      context: .
+      dockerfile: src/RecipeBook.App/Dockerfile
+
