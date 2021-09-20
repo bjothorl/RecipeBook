@@ -9,6 +9,7 @@ import {
   NavLink,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import Typography from "@mui/material/Typography";
 import "./NavMenu.css";
 
 export class NavMenu extends Component {
@@ -33,7 +34,7 @@ export class NavMenu extends Component {
     return (
       <header>
         <Navbar
-          className="navbar-expand-sm navbar-toggleable-sm ng-white mb-3"
+          className="navbar-expand-sm navbar-toggleable-sm primary-background"
           light
         >
           <Container>
@@ -48,8 +49,10 @@ export class NavMenu extends Component {
             >
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/recipes">
-                    RECIPES
+                  <NavLink tag={Link} className="text-light" to="/recipes">
+                    <Typography variant="h6" gutterBottom component="div">
+                      RECIPES
+                    </Typography>
                   </NavLink>
                 </NavItem>
               </ul>

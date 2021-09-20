@@ -7,9 +7,16 @@ export class Layout extends Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100vw",
+          height: "100vh",
+        }}
+      >
         <NavMenu />
-        <Container>{this.props.children}</Container>
+        {this.props.children}
       </div>
     );
   }
