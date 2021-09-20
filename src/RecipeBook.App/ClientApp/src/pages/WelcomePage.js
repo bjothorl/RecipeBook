@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import requirePropFactory from "@mui/utils/requirePropFactory";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 export default function WelcomePage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const styles = {
     box: {
       display: "flex",
       flexGrow: 1,
       flexDirection: "row",
+    },
+    button: {
+      width: "100%",
     },
     img: {
       width: "60%",
@@ -21,9 +26,11 @@ export default function WelcomePage() {
       justifyContent: "center",
       alignItems: "center",
       flexDirection: "column",
+      padding: "1em",
     },
     textField: {
-      width: "50%",
+      width: "100%",
+      marginBottom: "1em",
     },
   };
 
@@ -33,16 +40,21 @@ export default function WelcomePage() {
       <Box sx={styles.login}>
         <TextField
           id="outlined-basic"
-          label="Outlined"
+          label="email"
           variant="outlined"
           style={styles.textField}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           id="outlined-basic"
-          label="Outlined"
+          label="password"
           variant="outlined"
           style={styles.textField}
+          onChange={(e) => setPassword(e.target.value)}
         />
+        <Button style={styles.button} variant="contained">
+          sign in
+        </Button>
       </Box>
     </Box>
   );
