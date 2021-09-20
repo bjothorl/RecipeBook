@@ -8,7 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
 COPY ["RecipeBook.Api/RecipeBook.Api.csproj", "RecipeBook.Api/"]
-#COPY ["RecipeBook.ServiceLibrary/RecipeBook.ServiceLibrary.csproj", "RecipeBook.ServiceLibrary/"]
 RUN dotnet restore "RecipeBook.Api/RecipeBook.Api.csproj"
 COPY . .
 WORKDIR "/src/RecipeBook.Api"
