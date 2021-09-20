@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import "./NavMenu.css";
 
 export class NavMenu extends Component {
@@ -39,7 +40,7 @@ export class NavMenu extends Component {
         >
           <Container>
             <NavbarBrand tag={Link} to="/">
-              *LOGO*
+              <MenuBookIcon sx={{ fontSize: 50, color: "white" }} />
             </NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse
