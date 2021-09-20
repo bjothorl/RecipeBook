@@ -13,7 +13,7 @@ export default function WelcomePage() {
   const [password, setPassword] = useState("");
 
   const styles = {
-    box: {
+    container: {
       display: "flex",
       flexGrow: 1,
       flexDirection: "row",
@@ -55,7 +55,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <Box sx={styles.box}>
+    <Box sx={styles.container}>
       <img style={styles.img} src={require("../assets/food.jpg").default} />
       <Box sx={styles.login}>
         <Box sx={styles.icon}>

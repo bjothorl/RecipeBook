@@ -11,6 +11,7 @@ import "@fontsource/roboto/700.css";
 
 //components
 import WelcomePage from "./pages/WelcomePage";
+import RecipesPage from "./pages/RecipesPage";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -19,6 +20,7 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path="/" component={WelcomePage} />
+        <Route exact path="/recipes" component={RecipesPage} />
       </Layout>
     );
   }
