@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
-export default function ViewRecipe() {
+export default function ViewRecipe(props) {
   const styles = {
     container: {
       display: "flex",
@@ -18,7 +18,7 @@ export default function ViewRecipe() {
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.text} variant="h5">
-        View Recipe
+        View Recipe: {props.match.params.id}
       </Typography>
     </Box>
   );

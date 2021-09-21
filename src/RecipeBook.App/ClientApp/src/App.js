@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import fakeData from "./assets/fakeData.json";
 import "./custom.css";
 
 // fonts
@@ -17,12 +18,27 @@ import ViewRecipe from "./pages/ViewRecipe";
 export default class App extends Component {
   static displayName = App.name;
 
+  state = {
+    recipes: [],
+  };
+
+  componentDidMount() {
+    this.setState({ recipes: fakeData });
+  }
+
   render() {
     return (
       <Layout>
-        <Route exact path="/" component={WelcomePage} />
-        <Route exact path="/recipes" component={RecipesPage} />
-        <Route exact path="/recipes/view" component={ViewRecipe} />
+        <Switch>
+          <Route exact path="/" component={WelcomePage} />
+          <Route
+            path="/recipes"
+            component={(props) => (
+              <RecipesPage props={props} recipes={this.state.recipes} />
+            )}
+          />
+          <Route path="/view/:id" component={ViewRecipe} />
+        </Switch>
       </Layout>
     );
   }

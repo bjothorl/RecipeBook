@@ -37,7 +37,7 @@ export default function ListContainer({ data, columns, itemSize }) {
   };
 
   const handleOnClick = (recipe) => {
-    history.push("/recipes/view/" + recipe.id);
+    history.push("/view/" + recipe.id);
   };
   const handleOnAddRecipe = () => {};
 
