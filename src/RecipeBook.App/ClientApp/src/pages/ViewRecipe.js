@@ -1,11 +1,8 @@
-import React from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import React from "react";
 
-import data from "../assets/fakeData.json";
-import ListContainer from "../components/list/ListContainer";
-
-export default function RecipesPage() {
+export default function ViewRecipe() {
   const styles = {
     container: {
       display: "flex",
@@ -18,13 +15,11 @@ export default function RecipesPage() {
       margin: "1em",
     },
   };
-
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.text} variant="h5">
-        Here are your recipes
+        View Recipe
       </Typography>
-      <ListContainer data={data} itemSize={{ height: 400, width: 300 }} />
     </Box>
   );
 }

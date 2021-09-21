@@ -1,39 +1,60 @@
-import React from "react";
-import { Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Box } from "@mui/system";
+import { v4 } from "uuid";
+
+import AppListItem from "./AppListItem";
 
 export default function ListContainer({ data, columns, itemSize }) {
+  // calculate width of elements in row
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  let history = useHistory();
+
+  const updateDimensions = () => {
+    setWindowWidth(window.innerWidth - 50); //50 padding
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  const containerWidth = () => {
+    //makes sure that grid is centered
+    if (!data || itemSize.width * (data.length + 1) < windowWidth)
+      return "auto";
+    return Math.floor(windowWidth / itemSize.width) * itemSize.width;
+  };
+
   const styles = {
-    img: {
-      background: "lightgrey",
-      width: "100%",
-      height: "60%",
-      objectFit: "cover",
-    },
-    recipeBox: {
-      minWidth: itemSize,
-      height: itemSize,
-      background: "grey",
-      margin: "2em",
-    },
-    recipeContainer: {
+    recipesContainer: {
       display: "flex",
       flexDirection: "row",
-      width: "100%",
-      height: "100%",
-      justifyContent: "center",
+      width: containerWidth(),
+      height: "auto",
+      justifyContent: "flex-start",
       flexWrap: "wrap",
     },
   };
 
+  const handleOnClick = (recipe) => {
+    history.push("/recipes/view/" + recipe.id);
+  };
+  const handleOnAddRecipe = () => {};
+
   return (
-    <Box style={styles.recipeContainer}>
-      {data.map((recipe) => (
-        <Box sx={styles.recipeBox}>
-          <img src={recipe.logo} style={styles.img} />
-          <Typography variant="h6">{recipe.title}</Typography>
-        </Box>
-      ))}
+    <Box style={styles.recipesContainer}>
+      {data &&
+        data.map((recipe) => (
+          <AppListItem
+            onClick={(e) => handleOnClick(recipe)}
+            key={v4()}
+            itemSize={itemSize}
+            img={recipe.logo}
+            title={recipe.title}
+            content={recipe.description}
+          />
+        ))}
+      <AppListItem itemSize={itemSize} onClick={handleOnAddRecipe} />
     </Box>
   );
 }
