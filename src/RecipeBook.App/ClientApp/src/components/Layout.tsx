@@ -1,7 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import React, { Component } from "react";
-import { Container } from "reactstrap";
-import { NavMenu } from "./nav/NavMenu";
+import NavMenu from "./nav/NavMenu";
 
 const theme = createTheme({
   palette: {
@@ -18,7 +17,10 @@ const theme = createTheme({
   },
 });
 
-export class Layout extends Component {
+interface Props {}
+interface State {}
+
+export default class Layout extends Component<Props, State> {
   static displayName = Layout.name;
 
   render() {

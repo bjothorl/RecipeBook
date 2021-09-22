@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch, RouterProps } from "react-router-dom";
-import { Layout } from "./components/Layout";
+import Layout from "./components/Layout";
 import fakeData from "./assets/fakeData.json";
 import "./custom.css";
 import { Recipe } from "./Types";

@@ -13,10 +13,15 @@ import Typography from "@mui/material/Typography";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import "./NavMenu.css";
 
-export class NavMenu extends Component {
+interface Props {}
+interface State {
+  collapsed: boolean;
+}
+
+export default class NavMenu extends Component<Props, State> {
   static displayName = NavMenu.name;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
