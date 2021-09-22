@@ -62,7 +62,7 @@ namespace RecipeBook.Api.Controllers
                 var rowsAffected = await _recipeRepository.InsertAsync(recipe);
                 return Ok(recipe.Id + " inserted! rowsAffected = " + rowsAffected);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 var rowsAffected = await _recipeRepository.UpdateAsync(recipe);
                 return Ok(recipe.Id + " updated! rowsAffected = " + rowsAffected);
