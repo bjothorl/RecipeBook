@@ -351,3 +351,5 @@ MigrationBackup/
 # data volume for docker
 data-mssql/
 deploy/
+
+RecipeBook.WebApp
