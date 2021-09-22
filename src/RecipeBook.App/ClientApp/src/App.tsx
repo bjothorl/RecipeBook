@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, RouterProps } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import fakeData from "./assets/fakeData.json";
 import "./custom.css";
+import { Recipe } from "./Types";
 
 // fonts
 import "@fontsource/roboto/300.css";
@@ -15,7 +16,13 @@ import WelcomePage from "./pages/WelcomePage";
 import RecipesPage from "./pages/RecipesPage";
 import ViewRecipe from "./pages/ViewRecipe";
 
-export default class App extends Component {
+interface Props {}
+
+interface State {
+  recipes: Recipe[];
+}
+
+export default class App extends Component<Props, State> {
   static displayName = App.name;
 
   state = {
@@ -33,7 +40,7 @@ export default class App extends Component {
           <Route exact path="/" component={WelcomePage} />
           <Route
             path="/recipes"
-            component={(props) => (
+            component={(props: RouterProps) => (
               <RecipesPage props={props} recipes={this.state.recipes} />
             )}
           />

@@ -1,8 +1,11 @@
+import React, { ReactElement } from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import { useParams } from "react-router-dom";
 
-export default function ViewRecipe(props) {
+export default function ViewRecipe(): ReactElement {
+  let { id } = useParams<{ id: string }>();
+
   const styles = {
     container: {
       display: "flex",
@@ -14,11 +17,11 @@ export default function ViewRecipe(props) {
     text: {
       margin: "1em",
     },
-  };
+  } as const;
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.text} variant="h5">
-        View Recipe: {props.match.params.id}
+        View Recipe: {id}
       </Typography>
     </Box>
   );

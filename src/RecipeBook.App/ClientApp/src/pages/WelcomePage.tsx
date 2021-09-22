@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,7 +8,9 @@ import { FormGroup } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function WelcomePage() {
+interface Props {}
+
+export default function WelcomePage(props: Props): ReactElement {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,7 +54,7 @@ export default function WelcomePage() {
       marginTop: "1em",
       marginBottom: "1em",
     },
-  };
+  } as const;
 
   return (
     <Box sx={styles.container}>

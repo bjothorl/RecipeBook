@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Box } from "@mui/system";
 import { v4 } from "uuid";
 
 import AppListItem from "./AppListItem";
+import { Recipe } from "../../Types";
 
-export default function ListContainer({ data, columns, itemSize }) {
+interface Props {
+  data: Recipe[];
+  itemSize: { width: number; height: number };
+}
+
+export default function RecipeList({ data, itemSize }: Props): ReactElement {
   // calculate width of elements in row
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   let history = useHistory();
@@ -22,7 +28,8 @@ export default function ListContainer({ data, columns, itemSize }) {
     //makes sure that grid is centered
     if (!data || itemSize.width * (data.length + 1) < windowWidth)
       return "auto";
-    return Math.floor(windowWidth / itemSize.width) * itemSize.width;
+    const width = Math.floor(windowWidth / itemSize.width) * itemSize.width;
+    return width > 0 ? width : "auto";
   };
 
   const styles = {
@@ -34,19 +41,21 @@ export default function ListContainer({ data, columns, itemSize }) {
       justifyContent: "flex-start",
       flexWrap: "wrap",
     },
-  };
+  } as const;
 
-  const handleOnClick = (recipe) => {
+  const handleOnClick = (recipe: Recipe) => {
     history.push("/view/" + recipe.id);
   };
-  const handleOnAddRecipe = () => {};
+  const handleOnAddRecipe = () => {
+    console.log("add recipe!");
+  };
 
   return (
-    <Box style={styles.recipesContainer}>
+    <Box sx={styles.recipesContainer}>
       {data &&
         data.map((recipe) => (
           <AppListItem
-            onClick={(e) => handleOnClick(recipe)}
+            onClick={() => handleOnClick(recipe)}
             key={v4()}
             itemSize={itemSize}
             img={recipe.logo}

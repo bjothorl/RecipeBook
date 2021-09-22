@@ -1,10 +1,16 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { Recipe } from "../Types";
+import RecipeList from "../components/list/RecipeList";
+import { RouterProps } from "react-router";
 
-import ListContainer from "../components/list/ListContainer";
+interface Props {
+  props: RouterProps;
+  recipes: Recipe[];
+}
 
-export default function RecipesPage(props) {
+export default function RecipesPage({ props, recipes }: Props): ReactElement {
   console.log(props);
 
   const styles = {
@@ -18,17 +24,14 @@ export default function RecipesPage(props) {
     text: {
       margin: "1em",
     },
-  };
+  } as const;
 
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.text} variant="h5">
         Here are your recipes
       </Typography>
-      <ListContainer
-        data={props.recipes}
-        itemSize={{ height: 400, width: 300 }}
-      />
+      <RecipeList data={recipes} itemSize={{ height: 400, width: 300 }} />
     </Box>
   );
 }
