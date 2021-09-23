@@ -43,10 +43,6 @@ export default function RecipeList({ data, itemSize }: Props): ReactElement {
     },
   } as const;
 
-  const handleOnAddRecipe = () => {
-    console.log("add recipe!");
-  };
-
   return (
     <Box sx={styles.recipesContainer}>
       {data &&
@@ -61,7 +57,10 @@ export default function RecipeList({ data, itemSize }: Props): ReactElement {
             content={recipe.description}
           />
         ))}
-      <RecipeListItem itemSize={itemSize} onAddClick={handleOnAddRecipe} />
+      <RecipeListItem
+        itemSize={itemSize}
+        onAddClick={() => history.push("/add")}
+      />
     </Box>
   );
 }

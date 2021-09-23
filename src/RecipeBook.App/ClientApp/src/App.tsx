@@ -16,6 +16,7 @@ import WelcomePage from "./pages/WelcomePage";
 import RecipesPage from "./pages/RecipesPage";
 import ViewRecipe from "./pages/ViewRecipePage";
 import EditRecipePage from "./pages/EditRecipePage";
+import AddRecipePage from "./pages/AddRecipePage";
 
 interface Props {}
 
@@ -51,6 +52,7 @@ export default class App extends Component<Props, State> {
             path="/edit/:id"
             component={() => <EditRecipePage recipes={this.state.recipes} />}
           />
+          <Route path="/add" component={() => <AddRecipePage />} />
         </Switch>
       </Layout>
     );
