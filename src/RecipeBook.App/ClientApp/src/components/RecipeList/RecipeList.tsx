@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Box } from "@mui/system";
 import { v4 } from "uuid";
 
-import AppListItem from "./AppListItem";
+import RecipeListItem from "./RecipeListItem";
 import { Recipe } from "../../Types";
 
 interface Props {
@@ -43,9 +43,6 @@ export default function RecipeList({ data, itemSize }: Props): ReactElement {
     },
   } as const;
 
-  const handleOnClick = (recipe: Recipe) => {
-    history.push("/view/" + recipe.id);
-  };
   const handleOnAddRecipe = () => {
     console.log("add recipe!");
   };
@@ -54,8 +51,9 @@ export default function RecipeList({ data, itemSize }: Props): ReactElement {
     <Box sx={styles.recipesContainer}>
       {data &&
         data.map((recipe) => (
-          <AppListItem
-            onClick={() => handleOnClick(recipe)}
+          <RecipeListItem
+            onViewClick={() => history.push("/view/" + recipe.id)}
+            onEditClick={() => history.push("/edit/" + recipe.id)}
             key={v4()}
             itemSize={itemSize}
             img={recipe.logo}
@@ -63,7 +61,7 @@ export default function RecipeList({ data, itemSize }: Props): ReactElement {
             content={recipe.description}
           />
         ))}
-      <AppListItem itemSize={itemSize} onClick={handleOnAddRecipe} />
+      <RecipeListItem itemSize={itemSize} onAddClick={handleOnAddRecipe} />
     </Box>
   );
 }

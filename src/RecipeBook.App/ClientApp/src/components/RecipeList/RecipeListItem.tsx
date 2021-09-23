@@ -9,21 +9,26 @@ interface Props {
   img?: string;
   title?: string;
   content?: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onViewClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onEditClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onAddClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function AppListItem({
+export default function RecipeListItem({
   itemSize,
   img,
   title,
   content,
-  onClick,
+  onViewClick,
+  onEditClick,
+  onAddClick,
 }: Props) {
   const styles = {
     img: {
       background: "lightgrey",
       width: "100%",
       height: "45%",
+      minHeight: "45%",
       objectFit: "cover",
     },
     recipeContainer: {
@@ -77,18 +82,18 @@ export default function AppListItem({
               {title}
             </Typography>
             <Box sx={styles.content}>
-              <Typography variant="h6">{content}</Typography>
+              <Typography variant="body1">{content}</Typography>
             </Box>
             <Box sx={styles.buttonContainer}>
-              <Button sx={{ marginRight: "1em" }} onClick={onClick}>
+              <Button sx={{ marginRight: "1em" }} onClick={onViewClick}>
                 view
               </Button>
-              <Button>edit</Button>
+              <Button onClick={onEditClick}>edit</Button>
             </Box>
           </>
         ) : (
           <Box sx={styles.iconContainer}>
-            <Button onClick={onClick} sx={styles.addRecipeButtonContainer}>
+            <Button onClick={onAddClick} sx={styles.addRecipeButtonContainer}>
               <ControlPointIcon sx={{ fontSize: 50 }} />
               <Typography variant="h6">Add recipe</Typography>
             </Button>

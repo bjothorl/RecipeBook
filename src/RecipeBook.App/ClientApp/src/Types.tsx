@@ -1,4 +1,4 @@
-interface Ingredient {
+export interface Ingredient {
   recipeId: string;
   ordinalPosition: number;
   unit: string;
@@ -6,7 +6,7 @@ interface Ingredient {
   ingredient: string;
 }
 
-interface Instruction {
+export interface Instruction {
   recipeId: string;
   ordinalPosition: number;
   instruction: string;
