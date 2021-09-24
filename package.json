@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "@types/uuid": "^8.3.1"
+  },
+  "dependencies": {
+    "react-images-uploading": "^3.1.3"
   }
 }

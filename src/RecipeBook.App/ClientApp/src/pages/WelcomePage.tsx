@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -11,8 +12,9 @@ import Checkbox from "@mui/material/Checkbox";
 interface Props {}
 
 export default function WelcomePage(props: Props): ReactElement {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<String>("");
+  const [password, setPassword] = useState<String>("");
+  let history = useHistory();
 
   const styles = {
     container: {
@@ -56,6 +58,12 @@ export default function WelcomePage(props: Props): ReactElement {
     },
   } as const;
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    history.push("/recipes");
+  };
+
   return (
     <Box sx={styles.container}>
       <img style={styles.img} src={require("../assets/food.jpg").default} />
@@ -64,26 +72,30 @@ export default function WelcomePage(props: Props): ReactElement {
           <LockOpenIcon />
         </Box>
         <Typography>Sign In</Typography>
-        <FormGroup sx={styles.form}>
-          <TextField
-            id="outlined-basic"
-            label="email"
-            variant="outlined"
-            style={styles.textField}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            id="outlined-basic"
-            label="password"
-            variant="outlined"
-            style={styles.textField}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FormControlLabel control={<Checkbox />} label="Remember me" />
-          <Button style={styles.button} variant="contained">
-            sign in
-          </Button>
-        </FormGroup>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <FormGroup>
+            <TextField
+              key={0}
+              id="outlined-basic"
+              label="email"
+              variant="outlined"
+              style={styles.textField}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              key={1}
+              id="outlined-basic"
+              label="password"
+              variant="outlined"
+              style={styles.textField}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <FormControlLabel control={<Checkbox />} label="Remember me" />
+            <Button type="submit" style={styles.button} variant="contained">
+              sign in
+            </Button>
+          </FormGroup>
+        </form>
       </Box>
     </Box>
   );

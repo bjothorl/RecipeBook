@@ -39,7 +39,7 @@ export default class App extends Component<Props, State> {
     return (
       <Layout>
         <Switch>
-          <Route exact path="/" component={WelcomePage} />
+          <Route exact path="/" component={() => <WelcomePage />} />
           <Route
             path="/recipes"
             component={() => <RecipesPage recipes={this.state.recipes} />}
