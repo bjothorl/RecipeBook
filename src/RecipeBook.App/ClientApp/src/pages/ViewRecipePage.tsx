@@ -30,7 +30,7 @@ export default function ViewRecipe({ recipes }: Props): ReactElement {
       maxWidth: "1000px",
       width: "100%",
       height: "100%",
-      border: "1px solid #ccc",
+      border: "1px solid #eee",
     },
     img: {
       width: "100%",

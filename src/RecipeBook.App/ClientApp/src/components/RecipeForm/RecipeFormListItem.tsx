@@ -1,5 +1,10 @@
-import React, { ReactElement } from "react";
-import { Box, TextField, Typography } from "@mui/material";
+import React, {
+  ChangeEventHandler,
+  MouseEventHandler,
+  ReactElement,
+} from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   ingredient?: string;
@@ -7,6 +12,9 @@ interface Props {
   quantity?: number;
   instruction?: string;
   position?: number;
+  id: number;
+  onRemove: MouseEventHandler<HTMLButtonElement>;
+  onTextChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 export default function RecipeFormListItem({
@@ -15,12 +23,16 @@ export default function RecipeFormListItem({
   quantity,
   instruction,
   position,
+  id,
+  onRemove,
+  onTextChange,
 }: Props): ReactElement {
   const styles = {
     container: {
       display: "flex",
       flexDirection: "row",
       marginTop: "1em",
+      justifyContent: "center",
     },
     textFieldIngredient: {
       width: "80%",
@@ -38,51 +50,77 @@ export default function RecipeFormListItem({
       flex: 1,
       margin: "0.2em",
     },
+    textPosition: {
+      alignSelf: "center",
+      textAlign: "center",
+      width: "10%",
+      margin: "0.2em",
+    },
+    buttonDelete: {
+      alignSeld: "center",
+      margin: "0.2em",
+      width: "5%",
+    },
   } as const;
 
   return (
     <Box sx={styles.container}>
-      {ingredient && (
+      {ingredient !== undefined && (
         <>
           <TextField
             id="outlined-basic"
-            defaultValue={quantity}
+            name={"ingredient_" + id + "_" + "quantity"}
+            defaultValue={quantity ? quantity : ""}
             label="Quantity *"
-            variant="outlined"
+            variant="standard"
             style={styles.textFieldQuantity}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => onTextChange(e)}
           />
           <TextField
             id="outlined-basic"
+            name={"ingredient_" + id + "_" + "unit"}
             defaultValue={unit}
             label="Unit *"
-            variant="outlined"
+            variant="standard"
             style={styles.textFieldUnit}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => onTextChange(e)}
           />
           <TextField
             id="outlined-basic"
+            name={"ingredient_" + id + "_" + "ingredient"}
             defaultValue={ingredient}
             label="Name *"
-            variant="outlined"
+            variant="standard"
             style={styles.textFieldIngredient}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => onTextChange(e)}
           />
         </>
       )}
-      {instruction && (
+      {instruction !== undefined && (
         <>
-          <Typography>{position}</Typography>
+          <Typography sx={styles.textPosition} variant="subtitle2">
+            #{position}
+          </Typography>
           <TextField
             id="outlined-basic"
+            name={"instruction_" + id}
             defaultValue={instruction}
             label="Instruction *"
-            variant="outlined"
+            variant="standard"
             style={styles.textFieldInstruction}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => onTextChange(e)}
           />
         </>
       )}
+      <Button
+        type="submit"
+        color="secondary"
+        style={styles.buttonDelete}
+        variant="text"
+        onClick={onRemove}
+      >
+        <CloseIcon />
+      </Button>
     </Box>
   );
 }

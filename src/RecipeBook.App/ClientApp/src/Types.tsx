@@ -2,7 +2,7 @@ export interface Ingredient {
   recipeId: string;
   ordinalPosition: number;
   unit: string;
-  quantity: number;
+  quantity: number | null;
   ingredient: string;
 }
 

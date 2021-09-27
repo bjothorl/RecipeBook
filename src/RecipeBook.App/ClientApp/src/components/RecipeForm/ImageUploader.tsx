@@ -15,12 +15,14 @@ export default function ImageUploader({
       flex: 1,
     },
     input: {
-      position: "fixed",
+      position: "absolute",
       width: "100%",
+      maxWidth: "1000px",
       height: "250px",
       marginTop: "-250px",
       opacity: 0,
       flex: 1,
+      cursor: "pointer",
     },
     imageInput: {
       width: "100%",
