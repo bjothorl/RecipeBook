@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+
+import "./custom.css";
 import Layout from "./components/Layout";
 import fakeData from "./assets/fakeData.json";
-import "./custom.css";
 import { Recipe } from "./Types";
 
 // fonts
