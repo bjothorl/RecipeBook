@@ -57,16 +57,18 @@ namespace RecipeBook.ServiceLibrary.Domains
 
         public async Task<string> AddRecipe(RecipeEntity recipe)
         {
-            try { 
+            ImageUploadReponse imageReponse;
+
+            try {
+                imageReponse = await ImageUpload.UploadImage(recipe.Logo);
+                recipe.Logo = imageReponse._url;
                 var rowsAffected = await _recipeRepository.InsertAsync(recipe);
-
-                var uploadResult = await ImageUpload.UploadImage(recipe.Logo);
-
-                string str = uploadResult;
-                return recipe.Id + " inserted! rowsAffected = " + rowsAffected + "\n" + str;
+                return recipe.Id + " inserted! rowsAffected = " + rowsAffected;
             }
             catch (Exception e)
             {
+                // delete image
+
                 throw e;
             }
         }

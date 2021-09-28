@@ -8,7 +8,17 @@ using System.Threading.Tasks;
 
 namespace RecipeBook.ServiceLibrary.Domains
 {
-
+    public class ImageUploadReponse
+    {
+        
+        public string _url { get; set; }
+        public string _publicId { get; set; }
+        public ImageUploadReponse(string url, string publicId)
+        {
+            _url = url;
+            _publicId = publicId;
+        }
+    }
     class ImageUpload
     {
         public static Cloudinary cloudinary;
@@ -27,7 +37,7 @@ namespace RecipeBook.ServiceLibrary.Domains
             cloudinary = new Cloudinary(account);
         }
 
-        public static async Task<string> UploadImage(string imagePath)
+        public static async Task<ImageUploadReponse> UploadImage(string imagePath)
         {
             try
             {
@@ -39,7 +49,9 @@ namespace RecipeBook.ServiceLibrary.Domains
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
 
-                return uploadResult.JsonObj["url"].ToString();
+                ImageUploadReponse response = new ImageUploadReponse(uploadResult.JsonObj["url"].ToString(), uploadResult.JsonObj["public_id"].ToString());
+
+                return response;
             }
             catch (Exception e)
             {
