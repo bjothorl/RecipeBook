@@ -27,10 +27,10 @@ namespace RecipeBook.ServiceLibrary.Domains
             cloudinary = new Cloudinary(account);
         }
 
-        public static async Task<ImageUploadResult> UploadImage(string imagePath)
+        public static async Task<string> UploadImage(string imagePath)
         {
-            //try
-            //{
+            try
+            {
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(imagePath),
@@ -39,13 +39,13 @@ namespace RecipeBook.ServiceLibrary.Domains
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
 
-                return uploadResult;
-            //}
-            //catch (Exception e)
-            //{
-                
-            //}
-        }
+                return uploadResult.JsonObj["url"].ToString();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+}
     }
 
 }

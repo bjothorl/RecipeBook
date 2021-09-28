@@ -29,8 +29,14 @@ namespace RecipeBook.Api.Controllers
         [HttpPost] // api/recipe
         public async Task<IActionResult> PostAsync([FromBody] RecipeEntity recipe)
         {
-            var rowsAffected = await _recipe.AddRecipe(recipe);
-            return Ok(recipe.Id + " inserted! rowsAffected = " + rowsAffected + "!");
+            try { 
+                var result = await _recipe.AddRecipe(recipe);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return Ok(e.Message);
+            }
         }
 
         [HttpGet]
