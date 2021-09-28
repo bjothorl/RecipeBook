@@ -17,33 +17,33 @@ namespace RecipeBook.Api.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly RecipeRepository _recipeRepository;
+        private readonly Recipe _recipe;
 
         public RecipeController(IConfiguration configuration)
         {
             // the configuration dependency injection is automatically defaulted to appsettings.json 
-            _recipeRepository = new RecipeRepository(configuration, new IngredientRepository(), new InstructionRepository());
 
+            _recipe = new Recipe(configuration);
         }
 
         [HttpPost] // api/recipe
         public async Task<IActionResult> PostAsync([FromBody] RecipeEntity recipe)
         {
-            var rowsAffected = await _recipeRepository.InsertAsync(recipe);
+            var rowsAffected = await _recipe.AddRecipe(recipe);
             return Ok(recipe.Id + " inserted! rowsAffected = " + rowsAffected + "!");
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllOnceAsync()
         {
-            var recipeList = await _recipeRepository.GetAsync();
+            var recipeList = await _recipe.GetRecipes();
             return Ok(recipeList);
         }
 
         [HttpGet("{recipeId}")] // GET api/recipe/{recipeId}
         public async Task<IActionResult> GetOnceAsync([FromRoute] Guid recipeId)
         {
-            var recipe = await _recipeRepository.GetAsync(recipeId);
+            var recipe = await _recipe.GetRecipe(recipeId);
             return Ok(recipe);
         }
 
@@ -59,22 +59,21 @@ namespace RecipeBook.Api.Controllers
             // posts recipe, but if recipe exists, we modify current one
             try
             {
-                var rowsAffected = await _recipeRepository.InsertAsync(recipe);
+                var rowsAffected = await _recipe.AddRecipe(recipe);
                 return Ok(recipe.Id + " inserted! rowsAffected = " + rowsAffected);
             }
             catch (Exception)
             {
-                var rowsAffected = await _recipeRepository.UpdateAsync(recipe);
+                var rowsAffected = await _recipe.EditRecipe(recipe);
                 return Ok(recipe.Id + " updated! rowsAffected = " + rowsAffected);
             }
 
-            //return Ok(recipe);
         }
 
         [HttpDelete("{recipeId}")] // DELETE api/recipe/{recipeId}
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid recipeId)
         {
-            var rowsAffected = await _recipeRepository.DeleteAsync(recipeId);
+            var rowsAffected = await _recipe.DeleteRecipe(recipeId);
 
             return Ok(recipeId + " deleted! rows affected: " + rowsAffected);
         }
