@@ -1,13 +1,13 @@
 import React, { ReactElement } from "react";
 import { Checkbox, Typography } from "@mui/material";
-import { Ingredient, Instruction } from "../../Types";
+import { Ingredient, Instruction } from "../Types";
 import { Box } from "@mui/system";
 interface Props {
   ingredient?: Ingredient;
   instruction?: Instruction;
 }
 
-export default function RecipeItem({
+export default function RecipeCheckboxItem({
   ingredient,
   instruction,
 }: Props): ReactElement {

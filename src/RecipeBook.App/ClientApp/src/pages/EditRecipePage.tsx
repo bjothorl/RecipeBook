@@ -1,18 +1,19 @@
 import React, { ChangeEvent, FormEvent, ReactElement, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Button, FormGroup, TextField, Typography, Box } from "@mui/material";
+import { v4 } from "uuid";
+
+import { Recipe } from "../Types";
 import ImageUploader from "../components/RecipeForm/ImageUploader";
 import RecipeFormList from "../components/RecipeForm/RecipeFormList";
-import { Recipe } from "../Types";
-import { v4 } from "uuid";
+import RecipeFormDialog from "../components/RecipeForm/RecipeFormDialog";
 
 interface Props {
   recipes: Recipe[];
 }
 
-const createUniqueKeys = (recipe?: Recipe) => {
-  if (recipe) {
-    let n = Math.max(recipe.instructions.length, recipe.ingredients.length);
+const createUniqueKeys = (n?: number) => {
+  if (n) {
     let arr: string[] = [];
     for (let i = 0; i < n; i++) {
       arr.push(v4());
@@ -21,12 +22,25 @@ const createUniqueKeys = (recipe?: Recipe) => {
   }
   return [""];
 };
+const fixOrdinalPositions = (items: any) => {
+  const tmp = [...items];
+  tmp.forEach((item, i) => (item.ordinalPosition = i + 1));
+  return items;
+};
 
 export default function EditRecipePage({ recipes }: Props): ReactElement {
-  let { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const rec = recipes.find((r: Recipe) => r.id === id);
+  const history = useHistory();
   const [recipe, setRecipe] = useState<Recipe | undefined>(rec);
-  const [keys, setKeys] = useState<string[]>(createUniqueKeys(rec));
+  const [ingredientKeys, setIngredientKeys] = useState<string[]>(
+    createUniqueKeys(rec?.ingredients.length)
+  );
+  const [instructionKeys, setInstructionKeys] = useState<string[]>(
+    createUniqueKeys(rec?.instructions.length)
+  );
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
   const styles = {
     container: {
       display: "flex",
@@ -78,6 +92,15 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
     // handle serverside errors (null quantity etc.)
   };
 
+  const handleCloseDialog = (e: any) => {
+    setDialogOpen(false);
+  };
+
+  const handleDelete = (e: any) => {
+    console.log(recipe?.id, "deleted!");
+    history.push("/recipes");
+  };
+
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
       const file = URL.createObjectURL(e.target.files[0]);
@@ -102,7 +125,7 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
       (i) => i.ordinalPosition !== ordinalPosition
     );
 
-    setKeys(createUniqueKeys(recipe));
+    setIngredientKeys(createUniqueKeys(recipe?.ingredients.length));
 
     if (ingredients) {
       setRecipe({
@@ -121,7 +144,7 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
       (i) => i.ordinalPosition !== ordinalPosition
     );
 
-    setKeys(createUniqueKeys(recipe));
+    setInstructionKeys(createUniqueKeys(recipe?.instructions.length));
 
     if (instructions) {
       setRecipe({
@@ -141,12 +164,12 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
         quantity: null,
         ordinalPosition: recipe.ingredients.length + 1,
       });
-      const tmp = {
+      const tmp: Recipe = {
         ...recipe,
         ingredients: ingredients,
       };
-      setKeys(createUniqueKeys(tmp));
-      setRecipe(tmp as Recipe);
+      setIngredientKeys(createUniqueKeys(tmp?.ingredients.length));
+      setRecipe(tmp);
     }
   };
 
@@ -158,22 +181,24 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
         instruction: "",
         ordinalPosition: recipe.instructions.length + 1,
       });
-      const tmp = {
+      const tmp: Recipe = {
         ...recipe,
         instructions: instructions,
       };
-      setKeys(createUniqueKeys(tmp));
-      setRecipe(tmp as Recipe);
+      setInstructionKeys(createUniqueKeys(tmp?.instructions.length));
+      setRecipe(tmp);
     }
   };
 
-  const handleTextChange = (textField: any) => {
+  const handleTextChange = (
+    textField: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (textField !== undefined && textField !== null && recipe) {
-      const arr = textField.target.name.split("_");
-      const val = textField.target.value;
-      console.log(arr, val);
+      const arr: string[] = textField.target.name.split("_");
+      const strIndex: number = parseInt(arr[1]);
+      const val: string = textField.target.value;
 
-      let tmp = { ...recipe };
+      let tmp: Recipe = { ...recipe };
 
       if (tmp && tmp.ingredients && tmp.instructions) {
         if (arr[0] === "title") {
@@ -181,27 +206,21 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
         } else if (arr[0] === "description") {
           tmp.description = val;
         } else if (arr[0] === "ingredient") {
-          if (tmp.ingredients[arr[1]] !== undefined) {
-            if (arr[2] === "quantity") tmp.ingredients[arr[1]].quantity = val;
-            if (arr[2] === "unit") tmp.ingredients[arr[1]].unit = val;
+          if (tmp.ingredients[strIndex] !== undefined) {
+            if (arr[2] === "quantity")
+              tmp.ingredients[strIndex].quantity = parseInt(val);
+            if (arr[2] === "unit") tmp.ingredients[strIndex].unit = val;
             if (arr[2] === "ingredient")
-              tmp.ingredients[arr[1]].ingredient = val;
+              tmp.ingredients[strIndex].ingredient = val;
           }
         } else if (arr[0] === "instruction") {
-          if (tmp.instructions[arr[1]] !== undefined) {
-            tmp.instructions[1].instruction = val;
+          if (tmp.instructions[strIndex] !== undefined) {
+            tmp.instructions[strIndex].instruction = val;
           }
         }
-        console.log(tmp);
         setRecipe(tmp);
       }
     }
-  };
-
-  const fixOrdinalPositions = (items: any) => {
-    const tmp = [...items];
-    tmp.forEach((item, i) => (item.ordinalPosition = i + 1));
-    return items;
   };
 
   return (
@@ -246,7 +265,8 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
                 onAddIngredient={handleAddIngredient}
                 onAddInstruction={handleAddInstruction}
                 onTextChange={handleTextChange}
-                keys={keys}
+                ingredientKeys={ingredientKeys}
+                instructionKeys={instructionKeys}
               />
 
               <Box sx={styles.buttons}>
@@ -254,6 +274,7 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
                   style={styles.button}
                   variant="contained"
                   color="secondary"
+                  onClick={() => setDialogOpen(true)}
                 >
                   delete
                 </Button>
@@ -267,6 +288,13 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
                 <Button type="submit" style={styles.button} variant="contained">
                   save
                 </Button>
+
+                <RecipeFormDialog
+                  title="Do you really want to delete?"
+                  open={dialogOpen}
+                  onClose={handleCloseDialog}
+                  onConfirm={handleDelete}
+                />
               </Box>
             </FormGroup>
           </form>

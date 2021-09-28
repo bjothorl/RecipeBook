@@ -17,7 +17,8 @@ interface Props {
   onAddIngredient: React.MouseEventHandler;
   onAddInstruction: React.MouseEventHandler;
   onTextChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-  keys: string[];
+  ingredientKeys: string[];
+  instructionKeys: string[];
 }
 
 export default function RecipeFormList({
@@ -27,7 +28,8 @@ export default function RecipeFormList({
   onAddIngredient,
   onAddInstruction,
   onTextChange,
-  keys,
+  ingredientKeys,
+  instructionKeys,
 }: Props): ReactElement {
   const styles = {
     container: {
@@ -58,7 +60,7 @@ export default function RecipeFormList({
           {recipe.ingredients.map(
             ({ ingredient, unit, quantity, ordinalPosition }, i) => (
               <RecipeFormListItem
-                key={keys[i]}
+                key={ingredientKeys[i]}
                 id={i}
                 ingredient={ingredient}
                 unit={unit}
@@ -85,7 +87,7 @@ export default function RecipeFormList({
           </Typography>
           {recipe.instructions.map(({ instruction, ordinalPosition }, i) => (
             <RecipeFormListItem
-              key={keys[i]}
+              key={instructionKeys[i]}
               id={i}
               instruction={instruction}
               position={ordinalPosition}

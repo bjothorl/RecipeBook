@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { RouterProps, useHistory, useParams } from "react-router-dom";
 import { Recipe } from "../Types";
 
-import RecipeItem from "../components/RecipeForm/RecipeItem";
+import RecipeCheckboxItem from "../components/RecipeCheckboxItem";
 
 interface Props {
   props?: RouterProps;
@@ -78,7 +78,7 @@ export default function ViewRecipe({ recipes }: Props): ReactElement {
             </Typography>
             <Box sx={styles.listContainer}>
               {recipe.ingredients.map((item, i) => (
-                <RecipeItem key={i} ingredient={item} />
+                <RecipeCheckboxItem key={i} ingredient={item} />
               ))}
             </Box>
             <Typography sx={styles.subtitle} variant="subtitle2">
@@ -86,7 +86,7 @@ export default function ViewRecipe({ recipes }: Props): ReactElement {
             </Typography>
             <Box sx={styles.listContainer}>
               {recipe.instructions.map((item, i) => (
-                <RecipeItem key={i} instruction={item} />
+                <RecipeCheckboxItem key={i} instruction={item} />
               ))}
             </Box>
           </Box>
