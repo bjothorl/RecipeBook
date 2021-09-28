@@ -1,8 +1,10 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RecipeBook.ServiceLibrary.Domains
 {
@@ -10,33 +12,39 @@ namespace RecipeBook.ServiceLibrary.Domains
     class ImageUpload
     {
         public static Cloudinary cloudinary;
+        private readonly string _cloudName;
+        private readonly string _apiKey;
+        private readonly string _apiSecret;
 
-        public const string CLOUD_NAME = "cloud_name";
-        public const string API_KEY = "api_key";
-        public const string API_SECRET = "api_secret";
 
-        public ImageUpload()
+        public ImageUpload(IConfiguration configuration)
         {
-            Account account = new Account(CLOUD_NAME, API_KEY, API_SECRET);
+            _cloudName = configuration.GetSection("Cloudinary")["cloudName"];
+            _apiKey = configuration.GetSection("Cloudinary")["apiKey"];
+            _apiSecret = configuration.GetSection("Cloudinary")["apiSecret"];
+
+            Account account = new Account(_cloudName, _apiKey, _apiSecret);
             cloudinary = new Cloudinary(account);
         }
 
-        public static async void uploadImage(string imagePath)
+        public static async Task<ImageUploadResult> UploadImage(string imagePath)
         {
-            try
-            {
+            //try
+            //{
                 var uploadParams = new ImageUploadParams()
                 {
-                    File = new FileDescription(imagePath)
+                    File = new FileDescription(imagePath),
+                    Folder = "RecipeBook",
                 };
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                Console.WriteLine("[Image was uploaded successfully]");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+
+                return uploadResult;
+            //}
+            //catch (Exception e)
+            //{
+                
+            //}
         }
     }
 

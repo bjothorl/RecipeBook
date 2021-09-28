@@ -353,3 +353,4 @@ data-mssql/
 deploy/
 
 RecipeBook.WebApp
+src/RecipeBook.Api/appsettings.json

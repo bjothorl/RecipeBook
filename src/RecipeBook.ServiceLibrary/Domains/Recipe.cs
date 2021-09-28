@@ -24,11 +24,13 @@ namespace RecipeBook.ServiceLibrary.Domains
     {
         // initialize the varible to hold the repository
         private readonly RecipeRepository _recipeRepository;
+        private readonly ImageUpload _imageUpload;
 
         // constructor for Recipe, takes configuration and instantiates a new RecipeRepository
         public Recipe(IConfiguration configuration)
         {
             _recipeRepository = new RecipeRepository(configuration, new IngredientRepository(), new InstructionRepository());
+            _imageUpload = new ImageUpload(configuration);
         }
 
         public async Task<RecipeEntity> GetRecipe(Guid id)
@@ -56,7 +58,11 @@ namespace RecipeBook.ServiceLibrary.Domains
         public async Task<string> AddRecipe(RecipeEntity recipe)
         {
             var rowsAffected = await _recipeRepository.InsertAsync(recipe);
-            return recipe.Id + " inserted! rowsAffected = " + rowsAffected;
+
+            var uploadResult = await ImageUpload.UploadImage(recipe.Logo);
+
+            var str = uploadResult.ToString();
+            return recipe.Id + " inserted! rowsAffected = " + rowsAffected + "\n" + str;
         }
 
         public async Task<string> DeleteRecipe(Guid id)
