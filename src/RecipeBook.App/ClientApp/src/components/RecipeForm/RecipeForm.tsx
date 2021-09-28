@@ -9,7 +9,7 @@ import RecipeFormList from "./RecipeFormList";
 import RecipeFormDialog from "./RecipeFormDialog";
 
 interface Props {
-  recipe: Recipe;
+  recipe?: Recipe;
   onUpdateRecipe: (recipe: Recipe) => void;
 }
 

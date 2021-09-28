@@ -5,7 +5,7 @@ import RecipeFormListItem from "./RecipeFormListItem";
 import { Recipe } from "../../Types";
 
 interface Props {
-  recipe: Recipe;
+  recipe?: Recipe;
   onRemoveIngredient: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ordinalPosition: number
@@ -52,12 +52,13 @@ export default function RecipeFormList({
 
   return (
     <Box sx={styles.container}>
-      {recipe.ingredients && (
-        <>
-          <Typography sx={styles.subtitle} variant="subtitle2">
-            Ingredients
-          </Typography>
-          {recipe.ingredients.map(
+      {/* {recipe.ingredients && ( */}
+      <>
+        <Typography sx={styles.subtitle} variant="subtitle2">
+          Ingredients
+        </Typography>
+        {recipe &&
+          recipe.ingredients.map(
             ({ ingredient, unit, quantity, ordinalPosition }, i) => (
               <RecipeFormListItem
                 key={ingredientKeys[i]}
@@ -71,21 +72,18 @@ export default function RecipeFormList({
               />
             )
           )}
-          <Button
-            sx={styles.button}
-            variant="outlined"
-            onClick={onAddIngredient}
-          >
-            + add ingredient
-          </Button>
-        </>
-      )}
-      {recipe.instructions && (
-        <>
-          <Typography sx={styles.subtitle} variant="subtitle2">
-            Instructions
-          </Typography>
-          {recipe.instructions.map(({ instruction, ordinalPosition }, i) => (
+        <Button sx={styles.button} variant="outlined" onClick={onAddIngredient}>
+          + add ingredient
+        </Button>
+      </>
+      {/* )}
+      {recipe.instructions && ( */}
+      <>
+        <Typography sx={styles.subtitle} variant="subtitle2">
+          Instructions
+        </Typography>
+        {recipe &&
+          recipe.instructions.map(({ instruction, ordinalPosition }, i) => (
             <RecipeFormListItem
               key={instructionKeys[i]}
               id={i}
@@ -95,15 +93,15 @@ export default function RecipeFormList({
               onTextChange={onTextChange}
             />
           ))}
-          <Button
-            sx={styles.button}
-            variant="outlined"
-            onClick={onAddInstruction}
-          >
-            + add instruction
-          </Button>
-        </>
-      )}
+        <Button
+          sx={styles.button}
+          variant="outlined"
+          onClick={onAddInstruction}
+        >
+          + add instruction
+        </Button>
+      </>
+      {/* )} */}
     </Box>
   );
 }
