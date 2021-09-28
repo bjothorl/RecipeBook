@@ -24,13 +24,13 @@ namespace RecipeBook.ServiceLibrary.Domains
     {
         // initialize the varible to hold the repository
         private readonly RecipeRepository _recipeRepository;
-        private readonly ImageUpload _imageUpload;
+        private readonly CloudinaryImageStorage _imageUpload;
 
         // constructor for Recipe, takes configuration and instantiates a new RecipeRepository
         public Recipe(IConfiguration configuration)
         {
             _recipeRepository = new RecipeRepository(configuration, new IngredientRepository(), new InstructionRepository());
-            _imageUpload = new ImageUpload(configuration);
+            _imageUpload = new CloudinaryImageStorage(configuration);
         }
 
         public async Task<RecipeEntity> GetRecipe(Guid id)
@@ -60,15 +60,21 @@ namespace RecipeBook.ServiceLibrary.Domains
             ImageUploadReponse imageReponse;
 
             try {
-                imageReponse = await ImageUpload.UploadImage(recipe.Logo);
+                imageReponse = await CloudinaryImageStorage.UploadImage(recipe.Logo);
                 recipe.Logo = imageReponse._url;
-                var rowsAffected = await _recipeRepository.InsertAsync(recipe);
-                return recipe.Id + " inserted! rowsAffected = " + rowsAffected;
+                try {
+                    var rowsAffected = await _recipeRepository.InsertAsync(recipe);
+                    return recipe.Id + " inserted! rowsAffected = " + rowsAffected;
+                }
+                catch (Exception e)
+                {
+                    CloudinaryImageStorage.DeleteImage(imageReponse._publicId);
+                    throw e;
+                }
             }
             catch (Exception e)
             {
                 // delete image
-
                 throw e;
             }
         }

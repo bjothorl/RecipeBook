@@ -19,22 +19,22 @@ namespace RecipeBook.ServiceLibrary.Domains
             _publicId = publicId;
         }
     }
-    class ImageUpload
+    class CloudinaryImageStorage
     {
-        public static Cloudinary cloudinary;
+        public static Cloudinary _cloudinary;
         private readonly string _cloudName;
         private readonly string _apiKey;
         private readonly string _apiSecret;
 
 
-        public ImageUpload(IConfiguration configuration)
+        public CloudinaryImageStorage(IConfiguration configuration)
         {
             _cloudName = configuration.GetSection("Cloudinary")["cloudName"];
             _apiKey = configuration.GetSection("Cloudinary")["apiKey"];
             _apiSecret = configuration.GetSection("Cloudinary")["apiSecret"];
 
             Account account = new Account(_cloudName, _apiKey, _apiSecret);
-            cloudinary = new Cloudinary(account);
+            _cloudinary = new Cloudinary(account);
         }
 
         public static async Task<ImageUploadReponse> UploadImage(string imagePath)
@@ -47,7 +47,7 @@ namespace RecipeBook.ServiceLibrary.Domains
                     Folder = "RecipeBook",
                 };
 
-                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
                 ImageUploadReponse response = new ImageUploadReponse(uploadResult.JsonObj["url"].ToString(), uploadResult.JsonObj["public_id"].ToString());
 
@@ -57,7 +57,23 @@ namespace RecipeBook.ServiceLibrary.Domains
             {
                 throw e;
             }
-}
+        }
+
+        public static void DeleteImage(string publicId)
+        {
+            try {
+                var delResParams = new DelResParams()
+                {
+                    PublicIds = new List<string> { publicId }
+                };
+                _cloudinary.DeleteResources(delResParams);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 
 }
