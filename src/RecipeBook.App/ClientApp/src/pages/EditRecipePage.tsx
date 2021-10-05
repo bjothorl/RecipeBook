@@ -58,8 +58,7 @@ export default function EditRecipePage({ recipes }: Props): ReactElement {
 
     editRecipe(data, (res: any) => {
       console.log(res);
-
-      // history.push("/view/" + recipe?.id);
+      history.push("/view/" + recipe?.id);
     });
   };
 
