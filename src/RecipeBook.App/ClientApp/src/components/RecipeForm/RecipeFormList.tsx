@@ -62,10 +62,11 @@ export default function RecipeFormList({
             ({ ingredient, unit, quantity, ordinalPosition }, i) => (
               <RecipeFormListItem
                 key={ingredientKeys[i]}
+                type="ingredient"
                 id={i}
                 ingredient={ingredient}
                 unit={unit}
-                quantity={quantity ? quantity : undefined}
+                quantity={quantity}
                 position={ordinalPosition}
                 onRemove={(e) => onRemoveIngredient(e, ordinalPosition)}
                 onTextChange={onTextChange}
@@ -86,6 +87,7 @@ export default function RecipeFormList({
           recipe.instructions.map(({ instruction, ordinalPosition }, i) => (
             <RecipeFormListItem
               key={instructionKeys[i]}
+              type="instruction"
               id={i}
               instruction={instruction}
               position={ordinalPosition}

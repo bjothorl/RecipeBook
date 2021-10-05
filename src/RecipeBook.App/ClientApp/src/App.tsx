@@ -5,6 +5,7 @@ import "./custom.css";
 import Layout from "./components/Layout";
 import fakeData from "./assets/fakeData.json";
 import { Recipe } from "./Types";
+import { getRecipes } from "./utility/api";
 
 // fonts
 import "@fontsource/roboto/300.css";
@@ -18,6 +19,7 @@ import RecipesPage from "./pages/RecipesPage";
 import ViewRecipe from "./pages/ViewRecipePage";
 import EditRecipePage from "./pages/EditRecipePage";
 import AddRecipePage from "./pages/AddRecipePage";
+import axios from "axios";
 
 interface Props {}
 
@@ -33,7 +35,10 @@ export default class App extends Component<Props, State> {
   };
 
   componentDidMount() {
-    this.setState({ recipes: fakeData });
+    getRecipes((res: any) => {
+      console.log(res);
+      this.setState({ recipes: res });
+    });
   }
 
   render() {

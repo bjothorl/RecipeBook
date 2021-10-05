@@ -1,10 +1,11 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { RouterProps, useHistory, useParams } from "react-router-dom";
 import { Recipe } from "../Types";
 
 import RecipeCheckboxItem from "../components/RecipeCheckboxItem";
+import { getRecipe } from "../utility/api";
 
 interface Props {
   props?: RouterProps;
@@ -14,7 +15,14 @@ interface Props {
 export default function ViewRecipe({ recipes }: Props): ReactElement {
   let { id } = useParams<{ id: string }>();
   let history = useHistory();
-  const recipe = recipes.find((r: Recipe) => r.id === id);
+  const [recipe, setRecipe] = useState<Recipe | undefined>();
+  // const recipe = recipes.find((r: Recipe) => r.id === id);
+
+  useEffect(() => {
+    getRecipe(id, (res: Recipe) => {
+      setRecipe(res);
+    });
+  }, []);
 
   const styles = {
     container: {
@@ -59,7 +67,7 @@ export default function ViewRecipe({ recipes }: Props): ReactElement {
     },
   } as const;
 
-  const handleOnClick = (recipe: Recipe) => {
+  const handleOnEditClick = (recipe: Recipe) => {
     history.push("/edit/" + recipe.id);
   };
 
@@ -93,7 +101,7 @@ export default function ViewRecipe({ recipes }: Props): ReactElement {
           <Button
             style={styles.button}
             variant="contained"
-            onClick={() => handleOnClick(recipe)}
+            onClick={() => handleOnEditClick(recipe)}
           >
             edit
           </Button>

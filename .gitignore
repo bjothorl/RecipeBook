@@ -354,3 +354,5 @@ deploy/
 
 RecipeBook.WebApp
 src/RecipeBook.Api/appsettings.json
+
+tests/RecipeBook.ServiceLibrary.Tests/Domains/RecipeTests.cs

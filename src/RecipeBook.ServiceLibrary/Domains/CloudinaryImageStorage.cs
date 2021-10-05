@@ -19,7 +19,7 @@ namespace RecipeBook.ServiceLibrary.Domains
             _publicId = publicId;
         }
     }
-    class CloudinaryImageStorage
+    public class CloudinaryImageStorage
     {
         public static Cloudinary _cloudinary;
         private readonly string _cloudName;
@@ -29,18 +29,19 @@ namespace RecipeBook.ServiceLibrary.Domains
 
         public CloudinaryImageStorage(IConfiguration configuration)
         {
-            _cloudName = configuration.GetSection("Cloudinary")["cloudName"];
-            _apiKey = configuration.GetSection("Cloudinary")["apiKey"];
-            _apiSecret = configuration.GetSection("Cloudinary")["apiSecret"];
+            _cloudName = configuration.GetSection("Cloudinary")["CloudName"];
+            _apiKey = configuration.GetSection("Cloudinary")["ApiKey"];
+            _apiSecret = configuration.GetSection("Cloudinary")["ApiSecret"];
 
             Account account = new Account(_cloudName, _apiKey, _apiSecret);
             _cloudinary = new Cloudinary(account);
         }
 
-        public static async Task<ImageUploadReponse> UploadImage(string imagePath)
+        public async Task<ImageUploadReponse> UploadImage(string imagePath)
         {
             try
             {
+
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(imagePath),
@@ -59,21 +60,33 @@ namespace RecipeBook.ServiceLibrary.Domains
             }
         }
 
-        public static void DeleteImage(string publicId)
+        public string DeleteImage(string publicId)
         {
             try {
                 var delResParams = new DelResParams()
                 {
                     PublicIds = new List<string> { publicId }
                 };
-                _cloudinary.DeleteResources(delResParams);
+                var result = _cloudinary.DeleteResources(delResParams);
+                return result.ToString();
             }
             catch (Exception e)
             {
-                throw e;
+                return e.Message;
             }
         }
 
+        public void AddToUploadQueue (Guid recipeId, string url)
+        {
+            // upload image at later date
+
+            // edit database url
+        }
+
+        public void AddToDeletionQueue(string LogoId)
+        {
+            // delete image at later date
+        }
     }
 
 }

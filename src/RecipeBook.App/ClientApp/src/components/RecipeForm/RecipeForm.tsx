@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, ReactElement, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEventHandler,
+  ReactElement,
+  useState,
+} from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, FormGroup, TextField, Typography, Box } from "@mui/material";
 import { v4 } from "uuid";
@@ -10,7 +16,10 @@ import RecipeFormDialog from "./RecipeFormDialog";
 
 interface Props {
   recipe?: Recipe;
+  type: string;
   onUpdateRecipe: (recipe: Recipe) => void;
+  onSubmit: (e: FormEvent, blob: any) => void;
+  onDelete: MouseEventHandler<HTMLButtonElement>;
 }
 
 const createUniqueKeys = (n?: number) => {
@@ -31,7 +40,10 @@ const fixOrdinalPositions = (items: any) => {
 
 export default function RecipeForm({
   recipe,
+  type,
   onUpdateRecipe,
+  onSubmit,
+  onDelete,
 }: Props): ReactElement {
   const history = useHistory();
   const [ingredientKeys, setIngredientKeys] = useState<string[]>(
@@ -41,6 +53,9 @@ export default function RecipeForm({
     createUniqueKeys(recipe?.instructions.length)
   );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [imageBlob, setImageBlob] = useState<
+    string | undefined | null | ArrayBuffer
+  >();
 
   const styles = {
     form: {
@@ -65,31 +80,23 @@ export default function RecipeForm({
     },
   } as const;
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    // update recipe in database
-    console.log(recipe, "submitted!");
-
-    // handle serverside errors (null quantity etc.)
-  };
-
   const handleCloseDialog = (e: any) => {
     setDialogOpen(false);
   };
 
-  const handleDelete = (e: any) => {
-    console.log(recipe?.id, "deleted!");
-    history.push("/recipes");
-  };
-
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
+    if (e.target.files !== null && e.target.files.length > 0) {
       const file = URL.createObjectURL(e.target.files[0]);
       onUpdateRecipe({
         ...recipe,
         logo: file,
       } as Recipe);
+
+      var reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.addEventListener("load", (e: ProgressEvent<FileReader>) => {
+        setImageBlob(e.target?.result);
+      });
     }
 
     // if this doesnt work, use dropzone
@@ -141,9 +148,9 @@ export default function RecipeForm({
       const ingredients = [...recipe.ingredients];
       ingredients.push({
         recipeId: recipe.id,
-        ingredient: "",
-        unit: "",
-        quantity: null,
+        ingredient: undefined,
+        unit: undefined,
+        quantity: undefined,
         ordinalPosition: recipe.ingredients.length + 1,
       });
       const tmp: Recipe = {
@@ -206,7 +213,7 @@ export default function RecipeForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
+    <form onSubmit={(e) => onSubmit(e, imageBlob)} style={styles.form}>
       <FormGroup>
         {/* needed ? */}
         <TextField
@@ -252,7 +259,7 @@ export default function RecipeForm({
             color="secondary"
             onClick={() => setDialogOpen(true)}
           >
-            delete
+            {type == "edit" ? "delete" : "cancel"}
           </Button>
           <Button style={styles.button} variant="contained" color="secondary">
             preview?
@@ -262,10 +269,14 @@ export default function RecipeForm({
           </Button>
 
           <RecipeFormDialog
-            title="Do you really want to delete?"
+            title={
+              "Do you really want to " +
+              (type == "edit" ? "delete" : "cancel") +
+              "?"
+            }
             open={dialogOpen}
             onClose={handleCloseDialog}
-            onConfirm={handleDelete}
+            onConfirm={onDelete}
           />
         </Box>
       </FormGroup>

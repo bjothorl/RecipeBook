@@ -10,6 +10,7 @@ namespace RecipeBook.ServiceLibrary.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public string Logo { get; set; }
+        public string LogoId { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
 
         public IList<IngredientEntity> Ingredients { get; set; } = new List<IngredientEntity>();

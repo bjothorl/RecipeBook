@@ -40,7 +40,7 @@ namespace RecipeBook.ServiceLibrary.Tests.Repositories
                 .Returns(configurationSectionMock.Object);
 
             var recipeRepository = new RecipeRepository(configurationMock.Object, new IngredientRepository(), new InstructionRepository());
-            return recipeRepository;
+            return recipeRepository; 
         }
 
 

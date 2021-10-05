@@ -87,12 +87,14 @@ namespace RecipeBook.ServiceLibrary.Repositories
                                 ,[Title]
                                 ,[Description]
                                 ,[Logo]
+                                ,[LogoId]
                                 ,[CreatedDate])
                             VALUES
                                 (@Id
                                 ,@Title
                                 ,@Description
                                 ,@Logo
+                                ,@LogoId
                                 ,@CreatedDate)",
                             new
                             {
@@ -100,7 +102,8 @@ namespace RecipeBook.ServiceLibrary.Repositories
                                 entity.Title,
                                 entity.Description,
                                 entity.Logo,
-                                entity.CreatedDate
+                                entity.LogoId,
+                                CreatedDate = DateTimeOffset.UtcNow
                             }, transaction: transaction);
 
                     rowsAffected += await _ingredientRepository.InsertAsync(connection, transaction, entity.Ingredients);
@@ -126,14 +129,12 @@ namespace RecipeBook.ServiceLibrary.Repositories
                         UPDATE [dbo].[Recipes]
 					        SET [Title] = @Title
 						        ,[Description] = @Description
-						        ,[Logo] = @Logo
 					        WHERE [Id] = @Id",
                             new
                             {
                                 entity.Id,
                                 entity.Title,
                                 entity.Description,
-                                entity.Logo,
                             }, transaction: transaction);
 
                     await _ingredientRepository.DeleteAsync(connection, transaction, entity.Id);
@@ -148,6 +149,32 @@ namespace RecipeBook.ServiceLibrary.Repositories
                 }
             }
         }
+        public async Task<int> UpdateLogo(Guid Id, string Logo, string LogoId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    var rowsAffected = await connection.ExecuteAsync(@"
+                        UPDATE [dbo].[Recipes]
+					        SET [Logo] = @Logo
+                                ,[LogoId] = @LogoId
+					        WHERE [Id] = @Id",
+                            new
+                            {
+                                Id,
+                                Logo,
+                                LogoId,
+                            }, transaction: transaction);
+
+                    transaction.Commit();
+
+                    return rowsAffected;
+                }
+            }
+        }
+
         public async Task<int> DeleteAsync(Guid id)
         {
             using (var connection = new SqlConnection(_connectionString))

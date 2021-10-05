@@ -36,12 +36,14 @@ namespace RecipeBook.ServiceLibrary.Tests.Repositories
                           ,[Title]
                           ,[Description]
                           ,[Logo]
+                          ,[LogoId]
                           ,[CreatedDate])
                     VALUES
                           (@RecipeId
                           ,'Fried Chicken Seeded'
                           ,'Fried Chicken Seeded'
-                          ,null
+                          ,'https://res.cloudinary.com/dxb6aj074/image/upload/v1632903021/RecipeBook/uehoc3ffhv9dlvbq32st.jpg'
+                          ,'uehoc3ffhv9dlvbq32st'
                           ,GETUTCDATE())
                   INSERT INTO [dbo].[Ingredients]
                               ([RecipeId]

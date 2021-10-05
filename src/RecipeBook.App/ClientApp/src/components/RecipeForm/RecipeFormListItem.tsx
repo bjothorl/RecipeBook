@@ -12,6 +12,7 @@ interface Props {
   quantity?: number;
   instruction?: string;
   position?: number;
+  type: string;
   id: number;
   onRemove: MouseEventHandler<HTMLButtonElement>;
   onTextChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
@@ -24,6 +25,7 @@ export default function RecipeFormListItem({
   instruction,
   position,
   id,
+  type,
   onRemove,
   onTextChange,
 }: Props): ReactElement {
@@ -65,7 +67,7 @@ export default function RecipeFormListItem({
 
   return (
     <Box sx={styles.container}>
-      {ingredient !== undefined && (
+      {type === "ingredient" && (
         <>
           <TextField
             id="outlined-basic"
@@ -96,7 +98,7 @@ export default function RecipeFormListItem({
           />
         </>
       )}
-      {instruction !== undefined && (
+      {type === "instruction" && (
         <>
           <Typography sx={styles.textPosition} variant="subtitle2">
             #{position}
@@ -113,7 +115,6 @@ export default function RecipeFormListItem({
         </>
       )}
       <Button
-        type="submit"
         color="secondary"
         style={styles.buttonDelete}
         variant="text"

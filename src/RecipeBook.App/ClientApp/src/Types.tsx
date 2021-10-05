@@ -1,9 +1,9 @@
 export interface Ingredient {
   recipeId: string;
   ordinalPosition: number;
-  unit: string;
-  quantity: number | null;
-  ingredient: string;
+  unit: string | undefined;
+  quantity: number | undefined;
+  ingredient: string | undefined;
 }
 
 export interface Instruction {
@@ -17,7 +17,6 @@ export interface Recipe {
   title: string;
   description: string;
   logo: string;
-  createdDate: string;
   ingredients: Ingredient[];
   instructions: Instruction[];
 }

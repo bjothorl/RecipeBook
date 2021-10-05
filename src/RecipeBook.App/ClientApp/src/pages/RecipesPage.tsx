@@ -24,7 +24,7 @@ export default function RecipesPage({ recipes }: Props): ReactElement {
   return (
     <Box sx={styles.container}>
       <Typography sx={styles.text} variant="h5">
-        Here are your recipes
+        All recipes:
       </Typography>
       <RecipeList data={recipes} itemSize={{ height: 400, width: 300 }} />
     </Box>

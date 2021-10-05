@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RecipeBook.ServiceLibrary.Domains;
@@ -35,22 +36,40 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                return Ok(e.Message);
+                string[] arr = { "ERR", e.Message };
+                return Ok(arr);
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllOnceAsync()
         {
-            var recipeList = await _recipe.GetRecipes();
-            return Ok(recipeList);
+            try
+            {
+                var recipeList = await _recipe.GetRecipes();
+                return Ok(recipeList);
+            }
+            catch (Exception e)
+            {
+                string[] arr = { "ERR", e.Message };
+                return Ok(arr);
+            }
         }
 
         [HttpGet("{recipeId}")] // GET api/recipe/{recipeId}
         public async Task<IActionResult> GetOnceAsync([FromRoute] Guid recipeId)
         {
-            var recipe = await _recipe.GetRecipe(recipeId);
-            return Ok(recipe);
+            try
+            {
+                var recipe = await _recipe.GetRecipe(recipeId);
+                return Ok(recipe);
+            }
+            catch (Exception e)
+            {
+                string[] arr = { "ERR", e.Message };
+                return Ok(arr);
+            }
+            
         }
 
         [HttpGet("list")] // GET api/recipe?pageSize=10&pageNumber=1
@@ -62,26 +81,32 @@ namespace RecipeBook.Api.Controllers
         [HttpPut] // PUT api/recipe/
         public async Task<IActionResult> PutAsync([FromBody] RecipeEntity recipe)
         {
-            // posts recipe, but if recipe exists, we modify current one
             try
             {
-                var rowsAffected = await _recipe.AddRecipe(recipe);
-                return Ok(recipe.Id + " inserted! rowsAffected = " + rowsAffected);
+                var result = await _recipe.EditRecipe(recipe);
+                return Ok(result);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                var rowsAffected = await _recipe.EditRecipe(recipe);
-                return Ok(recipe.Id + " updated! rowsAffected = " + rowsAffected);
+                string[] arr = { "ERR", e.Message };
+                return Ok(arr);
             }
-
+            
         }
 
         [HttpDelete("{recipeId}")] // DELETE api/recipe/{recipeId}
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid recipeId)
         {
-            var rowsAffected = await _recipe.DeleteRecipe(recipeId);
-
-            return Ok(recipeId + " deleted! rows affected: " + rowsAffected);
+            try
+            {
+                var rowsAffected = await _recipe.DeleteRecipe(recipeId);
+                return Ok(recipeId);
+            }
+            catch (Exception e)
+            {
+                string[] arr = { "ERR", e.Message };
+                return Ok(arr);
+            }
         }
     }
 }
