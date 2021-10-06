@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using RecipeBook.Api.Models;
-using RecipeBook.Api.Services;
+using RecipeBook.ServiceLibrary.Models;
+using RecipeBook.ServiceLibrary.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq;
