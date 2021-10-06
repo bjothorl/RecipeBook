@@ -6,10 +6,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RecipeBook.Api.Helpers;
+using RecipeBook.Api.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+//https://www.youtube.com/watch?v=NkIaIA0HwPU
+//https://github.com/infologs/aspnet-core-json-web-token-implementation-using-middleware-JWT-Authentication/blob/master/JWTTokenProject/Startup.cs
 
 namespace RecipeBook.Api
 {
@@ -26,6 +31,7 @@ namespace RecipeBook.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // cross origin resource sharing
             services.AddCors();
             services.AddControllers();
         }
@@ -38,10 +44,14 @@ namespace RecipeBook.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            // allow everything 
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseHttpsRedirection();
 

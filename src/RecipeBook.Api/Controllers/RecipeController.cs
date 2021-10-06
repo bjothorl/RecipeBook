@@ -23,7 +23,6 @@ namespace RecipeBook.Api.Controllers
         public RecipeController(IConfiguration configuration)
         {
             // the configuration dependency injection is automatically defaulted to appsettings.json 
-
             _recipe = new Recipe(configuration);
         }
 
@@ -41,6 +40,7 @@ namespace RecipeBook.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllOnceAsync()
         {

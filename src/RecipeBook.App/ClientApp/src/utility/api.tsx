@@ -3,7 +3,12 @@ import { Recipe } from "../Types";
 
 function getRecipes(callback: Function): void {
   axios
-    .get("https://localhost:5401/api/recipe")
+    .get("https://localhost:5401/api/recipe", {
+      headers: {
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MzM1MTU5NjAsImV4cCI6MTYzNDEyMDc1OCwiaWF0IjoxNjMzNTE1OTYwfQ.uUv6RYedx0FOBP2FGqJT8Jx2x_0zTqGxPB1kE09JsXg",
+      },
+    })
     .then((res) => {
       callback(res.data);
     })
