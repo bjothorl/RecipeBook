@@ -18,19 +18,19 @@ namespace RecipeBook.Api.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly RecipeService _recipe;
+        private readonly RecipeService _recipeService;
 
         public RecipeController(IConfiguration configuration)
         {
             // the configuration dependency injection is automatically defaulted to appsettings.json 
-            _recipe = new RecipeService(configuration);
+            _recipeService = new RecipeService(configuration);
         }
 
         [HttpPost] // api/recipe
         public async Task<IActionResult> PostAsync([FromBody] RecipeEntity recipe)
         {
             try { 
-                var result = await _recipe.AddRecipe(recipe);
+                var result = await _recipeService.AddRecipe(recipe);
                 return Ok(result);
             }
             catch (Exception e)
@@ -46,7 +46,7 @@ namespace RecipeBook.Api.Controllers
         {
             try
             {
-                var recipeList = await _recipe.GetRecipes();
+                var recipeList = await _recipeService.GetRecipes();
                 return Ok(recipeList);
             }
             catch (Exception e)
@@ -61,7 +61,7 @@ namespace RecipeBook.Api.Controllers
         {
             try
             {
-                var recipe = await _recipe.GetRecipe(recipeId);
+                var recipe = await _recipeService.GetRecipe(recipeId);
                 return Ok(recipe);
             }
             catch (Exception e)
@@ -83,7 +83,7 @@ namespace RecipeBook.Api.Controllers
         {
             try
             {
-                var result = await _recipe.EditRecipe(recipe);
+                var result = await _recipeService.EditRecipe(recipe);
                 return Ok(result);
             }
             catch (Exception e)
@@ -99,7 +99,7 @@ namespace RecipeBook.Api.Controllers
         {
             try
             {
-                var rowsAffected = await _recipe.DeleteRecipe(recipeId);
+                var rowsAffected = await _recipeService.DeleteRecipe(recipeId);
                 return Ok(recipeId);
             }
             catch (Exception e)
