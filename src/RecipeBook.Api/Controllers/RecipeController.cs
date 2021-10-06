@@ -18,12 +18,12 @@ namespace RecipeBook.Api.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
-        private readonly Recipe _recipe;
+        private readonly RecipeService _recipe;
 
         public RecipeController(IConfiguration configuration)
         {
             // the configuration dependency injection is automatically defaulted to appsettings.json 
-            _recipe = new Recipe(configuration);
+            _recipe = new RecipeService(configuration);
         }
 
         [HttpPost] // api/recipe
