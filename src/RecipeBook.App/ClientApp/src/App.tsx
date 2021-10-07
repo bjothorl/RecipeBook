@@ -5,7 +5,6 @@ import "./custom.css";
 import Layout from "./components/Layout";
 import fakeData from "./assets/fakeData.json";
 import { Recipe } from "./Types";
-import { getRecipes } from "./utility/api";
 
 // fonts
 import "@fontsource/roboto/300.css";
@@ -19,7 +18,7 @@ import RecipesPage from "./pages/RecipesPage";
 import ViewRecipe from "./pages/ViewRecipePage";
 import EditRecipePage from "./pages/EditRecipePage";
 import AddRecipePage from "./pages/AddRecipePage";
-import axios from "axios";
+import RegisterPage from "./pages/RegisterPage";
 
 interface Props {}
 
@@ -30,15 +29,8 @@ interface State {
 export default class App extends Component<Props, State> {
   static displayName = App.name;
 
-  state = {
-    recipes: [],
-  };
-
   componentDidMount() {
-    getRecipes((res: any) => {
-      console.log(res);
-      this.setState({ recipes: res });
-    });
+    //
   }
 
   render() {
@@ -46,18 +38,10 @@ export default class App extends Component<Props, State> {
       <Layout>
         <Switch>
           <Route exact path="/" component={() => <WelcomePage />} />
-          <Route
-            path="/recipes"
-            component={() => <RecipesPage recipes={this.state.recipes} />}
-          />
-          <Route
-            path="/view/:id"
-            component={() => <ViewRecipe recipes={this.state.recipes} />}
-          />
-          <Route
-            path="/edit/:id"
-            component={() => <EditRecipePage recipes={this.state.recipes} />}
-          />
+          <Route path="/register" component={() => <RegisterPage />} />
+          <Route path="/recipes" component={() => <RecipesPage />} />
+          <Route path="/view/:id" component={() => <ViewRecipe />} />
+          <Route path="/edit/:id" component={() => <EditRecipePage />} />
           <Route path="/add" component={() => <AddRecipePage />} />
         </Switch>
       </Layout>

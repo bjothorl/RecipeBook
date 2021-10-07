@@ -5,14 +5,9 @@ import { RouterProps, useHistory, useParams } from "react-router-dom";
 import { Recipe } from "../Types";
 
 import RecipeCheckboxItem from "../components/RecipeCheckboxItem";
-import { getRecipe } from "../utility/api";
+import { getRecipe } from "../utility/Api/recipe";
 
-interface Props {
-  props?: RouterProps;
-  recipes: Recipe[];
-}
-
-export default function ViewRecipe({ recipes }: Props): ReactElement {
+export default function ViewRecipe(): ReactElement {
   let { id } = useParams<{ id: string }>();
   let history = useHistory();
   const [recipe, setRecipe] = useState<Recipe | undefined>();

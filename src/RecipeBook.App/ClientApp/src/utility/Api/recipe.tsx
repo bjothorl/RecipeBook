@@ -1,12 +1,23 @@
 import axios from "axios";
-import { Recipe } from "../Types";
+import { Recipe } from "../../Types";
+
+let connStr = "https://localhost:44373/api/recipe/";
+
+function auth() {
+  let token = localStorage.getItem("token");
+  if (token === null) {
+    return null;
+  } else return token;
+}
 
 function getRecipes(callback: Function): void {
+  let token = auth();
+  if (!token) return;
+
   axios
-    .get("https://localhost:5401/api/recipe", {
+    .get(connStr, {
       headers: {
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2MzM1MTU5NjAsImV4cCI6MTYzNDEyMDc1OCwiaWF0IjoxNjMzNTE1OTYwfQ.uUv6RYedx0FOBP2FGqJT8Jx2x_0zTqGxPB1kE09JsXg",
+        Authorization: token,
       },
     })
     .then((res) => {
@@ -16,8 +27,15 @@ function getRecipes(callback: Function): void {
 }
 
 function getRecipe(recipeId: string, callback: Function): void {
+  let token = auth();
+  if (!token) return;
+
   axios
-    .get("https://localhost:5401/api/recipe/" + recipeId)
+    .get(connStr + recipeId, {
+      headers: {
+        Authorization: token,
+      },
+    })
     .then((res) => {
       callback(res.data);
     })
@@ -25,8 +43,15 @@ function getRecipe(recipeId: string, callback: Function): void {
 }
 
 function postRecipe(data: Recipe, callback: Function) {
+  let token = auth();
+  if (!token) return;
+
   axios
-    .post("https://localhost:5401/api/recipe", data)
+    .post(connStr, data, {
+      headers: {
+        Authorization: token,
+      },
+    })
     .then((res) => {
       callback(res);
     })
@@ -36,8 +61,15 @@ function postRecipe(data: Recipe, callback: Function) {
 }
 
 function editRecipe(data: Recipe, callback: Function) {
+  let token = auth();
+  if (!token) return;
+
   axios
-    .put("https://localhost:5401/api/recipe", data)
+    .put(connStr, data, {
+      headers: {
+        Authorization: token,
+      },
+    })
     .then((res) => {
       callback(res);
     })
@@ -47,8 +79,15 @@ function editRecipe(data: Recipe, callback: Function) {
 }
 
 function deleteRecipe(recipeId: string, callback: Function): void {
+  let token = auth();
+  if (!token) return;
+
   axios
-    .delete("https://localhost:5401/api/recipe/" + recipeId)
+    .delete(connStr + recipeId, {
+      headers: {
+        Authorization: token,
+      },
+    })
     .then((res) => {
       callback(res.data);
     })

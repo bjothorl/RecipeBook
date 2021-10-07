@@ -20,3 +20,10 @@ export interface Recipe {
   ingredients: Ingredient[];
   instructions: Instruction[];
 }
+
+export interface User {
+  id: string;
+  username: string;
+  password: string;
+  token: string;
+}

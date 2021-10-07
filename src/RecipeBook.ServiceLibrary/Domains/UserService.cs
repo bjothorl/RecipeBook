@@ -10,24 +10,17 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BC = BCrypt.Net.BCrypt;
 
 namespace RecipeBook.ServiceLibrary.Domains
 {
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
-        IEnumerable<UserEntity> GetAll();
-        UserEntity GetById(int id);
+        Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
     }
 
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production application
-        private List<UserEntity> _users = new List<UserEntity>
-        {
-            new UserEntity { Id = 1, Username = "test", Password = "test" }
-        };
-
         private readonly string _jwtSecret;
         private readonly UserRepository _userRepository;
 
@@ -43,10 +36,10 @@ namespace RecipeBook.ServiceLibrary.Domains
 
             try
             {
-                user.Id = 3;
                 user.Username = model.Username;
-                user.Password = generateHash(model.Password);
+                user.HashedPassword = BC.HashPassword(model.Password);
                 await _userRepository.InsertAsync(user);
+
                 return user;
             } catch (Exception e)
             {
@@ -56,28 +49,29 @@ namespace RecipeBook.ServiceLibrary.Domains
             
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            try
+            {
+                // get user and hashed password
+                var user = await _userRepository.GetAsync(model.Username);
 
-            // return null if user not found
-            if (user == null) return null;
+                // verify password
+                if (BC.Verify(model.Password, user.HashedPassword))
+                {
+                    // authentication successful so generate jwt token
+                    var token = generateJwtToken(user);
+                    return new AuthenticateResponse(user, token);
+                }
 
-            // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
-
-            return new AuthenticateResponse(user, token);
+                return null;
+            } catch (Exception e)
+            {
+                // if username or password doesnt exist, throws "sequence contains no elements"
+                throw e;
+            }
         }
 
-        public IEnumerable<UserEntity> GetAll()
-        {
-            return _users;
-        }
-
-        public UserEntity GetById(int id)
-        {
-            return _users.FirstOrDefault(x => x.Id == id);
-        }
 
         // helper methods
         private string generateJwtToken(UserEntity user)
@@ -87,17 +81,12 @@ namespace RecipeBook.ServiceLibrary.Domains
             var key = Encoding.ASCII.GetBytes(_jwtSecret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Username) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
-        private string generateHash(string password)
-        {
-
-            return "hash";
         }
     }
 }

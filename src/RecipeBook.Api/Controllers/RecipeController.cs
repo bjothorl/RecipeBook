@@ -26,6 +26,7 @@ namespace RecipeBook.Api.Controllers
             _recipeService = new RecipeService(configuration);
         }
 
+        [Authorize]
         [HttpPost] // api/recipe
         public async Task<IActionResult> PostAsync([FromBody] RecipeEntity recipe)
         {
@@ -56,6 +57,7 @@ namespace RecipeBook.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{recipeId}")] // GET api/recipe/{recipeId}
         public async Task<IActionResult> GetOnceAsync([FromRoute] Guid recipeId)
         {
@@ -78,6 +80,7 @@ namespace RecipeBook.Api.Controllers
             return Ok(pageSize + " " + pageNumber);
         }
 
+        [Authorize]
         [HttpPut] // PUT api/recipe/
         public async Task<IActionResult> PutAsync([FromBody] RecipeEntity recipe)
         {
@@ -94,6 +97,7 @@ namespace RecipeBook.Api.Controllers
             
         }
 
+        [Authorize]
         [HttpDelete("{recipeId}")] // DELETE api/recipe/{recipeId}
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid recipeId)
         {

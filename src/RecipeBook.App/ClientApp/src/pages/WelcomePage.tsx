@@ -8,11 +8,13 @@ import { Typography } from "@mui/material";
 import { FormGroup } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { loginUser } from "../utility/Api/user";
+import { AxiosResponse } from "axios";
 
 interface Props {}
 
 export default function WelcomePage(props: Props): ReactElement {
-  const [email, setEmail] = useState<String>("");
+  const [username, setUsername] = useState<String>("");
   const [password, setPassword] = useState<String>("");
   let history = useHistory();
 
@@ -61,7 +63,16 @@ export default function WelcomePage(props: Props): ReactElement {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    history.push("/recipes");
+    loginUser(
+      { Username: username, Password: password },
+      (res: AxiosResponse<any>) => {
+        if (res && res.status == 200) {
+          history.push("/recipes");
+        } else {
+          console.log(res.status);
+        }
+      }
+    );
   };
 
   return (
@@ -71,7 +82,7 @@ export default function WelcomePage(props: Props): ReactElement {
         <Box sx={styles.icon}>
           <LockOpenIcon />
         </Box>
-        <Typography>Sign In</Typography>
+        <Typography variant="h6">Sign In</Typography>
         <form onSubmit={handleSubmit} style={styles.form}>
           <FormGroup>
             <TextField
@@ -80,7 +91,7 @@ export default function WelcomePage(props: Props): ReactElement {
               label="email"
               variant="outlined"
               style={styles.textField}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               key={1}
@@ -95,6 +106,14 @@ export default function WelcomePage(props: Props): ReactElement {
               sign in
             </Button>
           </FormGroup>
+          <Button
+            style={styles.button}
+            variant="contained"
+            color="secondary"
+            onClick={() => history.push("/register")}
+          >
+            Register
+          </Button>
         </form>
       </Box>
     </Box>

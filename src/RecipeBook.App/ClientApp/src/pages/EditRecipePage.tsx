@@ -4,12 +4,9 @@ import { Box, formControlClasses, Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { Recipe } from "../Types";
 import RecipeForm from "../components/RecipeForm/RecipeForm";
-import { getRecipe, editRecipe, deleteRecipe } from "../utility/api";
+import { getRecipe, editRecipe, deleteRecipe } from "../utility/Api/recipe";
 
-interface Props {
-  recipes: Recipe[];
-}
-export default function EditRecipePage({ recipes }: Props): ReactElement {
+export default function EditRecipePage(): ReactElement {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<Recipe | undefined>();
   const [loading, setLoading] = useState<boolean>(false);

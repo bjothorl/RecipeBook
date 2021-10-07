@@ -1,15 +1,22 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using RecipeBook.ServiceLibrary.Entities;
+using RecipeBook.ServiceLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RecipeBook.ServiceLibrary.Repositories
 {
-    public class UserRepository
+    public interface IUserRepository
+    {
+        Task<int> InsertAsync(UserEntity user);
+    }
+
+    public class UserRepository : IUserRepository
     {
         // connect to database, get / store encrypted passwords, etc
         private readonly string _connectionString;
@@ -18,7 +25,7 @@ namespace RecipeBook.ServiceLibrary.Repositories
             _connectionString = configuration.GetConnectionString("MainDatabase");
         }
 
-        public async Task<int> InsertAsync(UserEntity user)
+        public async Task<int> InsertAsync(UserEntity entity)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -29,20 +36,15 @@ namespace RecipeBook.ServiceLibrary.Repositories
 
                     var rowsAffected = await connection.ExecuteAsync(@"
                     INSERT INTO [dbo].[Users]
-                                ([Id]
-                                ,[Username]
-                                ,[Password]
-                                ,[CreatedDate])
+                                ([Username]
+                                ,[HashedPassword])
                             VALUES
-                                (@Id
-                                ,@Username
-                                ,@Password
-                                ,@CreatedDate)",
+                                (@Username
+                                ,@HashedPassword)",
                             new
                             {
-                                Id = 3,
-                                Username = "bob",
-                                Password = "hash",
+                                entity.Username,
+                                entity.HashedPassword,
                             }, transaction: transaction);
 
                     transaction.Commit();
@@ -51,6 +53,26 @@ namespace RecipeBook.ServiceLibrary.Repositories
 
                 }
 
+            }
+        }
+
+        public async Task<UserEntity> GetAsync(string Username)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                using (var reader = await connection.QueryMultipleAsync(@"
+                                    SELECT *
+                                    FROM [Users]
+                                    WHERE [Username] = @Username",
+                    new
+                    {
+                        Username
+                    }))
+                {
+                    var user = await reader.ReadSingleAsync<UserEntity>();
+
+                    return user;
+                }
             }
         }
     }

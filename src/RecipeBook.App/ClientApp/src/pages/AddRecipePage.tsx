@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 import { useHistory } from "react-router-dom";
 import { Recipe } from "../Types";
 import RecipeForm from "../components/RecipeForm/RecipeForm";
-import { postRecipe } from "../utility/api";
+import { postRecipe } from "../utility/Api/recipe";
 interface Props {}
 
 export default function AddRecipePage({}: Props): ReactElement {
