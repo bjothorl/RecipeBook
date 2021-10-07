@@ -32,6 +32,16 @@ namespace RecipeBook.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("register")]
+        public IActionResult Register(RegisterRequest model)
+        {
+            var response = _userService.RegisterUser(model);
+
+            if (response == null)
+                return BadRequest(new { message = "Something went wrong." });
+
+            return Ok(response);
+        }
 
         [Authorize]
         [HttpGet]

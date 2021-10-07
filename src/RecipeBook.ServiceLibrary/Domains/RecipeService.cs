@@ -24,13 +24,13 @@ namespace RecipeBook.ServiceLibrary.Domains
     {
         // initialize the varible to hold the repository
         private readonly RecipeRepository _recipeRepository;
-        public readonly CloudinaryImageStorage _imageUpload;
+        public readonly CloudinaryImageStorageService _imageUpload;
 
         // constructor for Recipe, takes configuration and instantiates a new RecipeRepository
         public RecipeService(IConfiguration configuration)
         {
             _recipeRepository = new RecipeRepository(configuration, new IngredientRepository(), new InstructionRepository());
-            _imageUpload = new CloudinaryImageStorage(configuration);
+            _imageUpload = new CloudinaryImageStorageService(configuration);
         }
 
         public async Task<RecipeEntity> GetRecipe(Guid id)

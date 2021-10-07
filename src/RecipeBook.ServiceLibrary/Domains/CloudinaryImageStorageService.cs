@@ -19,7 +19,7 @@ namespace RecipeBook.ServiceLibrary.Domains
             _publicId = publicId;
         }
     }
-    public class CloudinaryImageStorage
+    public class CloudinaryImageStorageService
     {
         public static Cloudinary _cloudinary;
         private readonly string _cloudName;
@@ -27,7 +27,7 @@ namespace RecipeBook.ServiceLibrary.Domains
         private readonly string _apiSecret;
 
 
-        public CloudinaryImageStorage(IConfiguration configuration)
+        public CloudinaryImageStorageService(IConfiguration configuration)
         {
             _cloudName = configuration.GetSection("Cloudinary")["CloudName"];
             _apiKey = configuration.GetSection("Cloudinary")["ApiKey"];

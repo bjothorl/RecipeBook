@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Users]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [Username] NVARCHAR(50) NOT NULL, 
+    [HashedPassword] NVARCHAR(50) NOT NULL, 
+    [CreatedDate] DATETIMEOFFSET NOT NULL DEFAULT (GETUTCDATE())
+)

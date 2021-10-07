@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Text.Json.Serialization;
 
-namespace RecipeBook.ServiceLibrary.Entities
+namespace RecipeBook.ServiceLibrary.Models
 {
-    public class UserEntity
+    public class RegisterRequest
     {
-        public int Id { get; set; }
+        [Required]
         public string Username { get; set; }
-        [JsonIgnore]
+
+        [Required]
         public string Password { get; set; }
     }
 }

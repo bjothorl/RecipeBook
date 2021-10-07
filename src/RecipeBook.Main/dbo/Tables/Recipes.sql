@@ -6,4 +6,5 @@
 	[Logo]			NVARCHAR(MAX)		NULL,
 	[LogoId] NVARCHAR(MAX) NULL,
 	[CreatedDate]	DATETIMEOFFSET		NOT NULL DEFAULT (GETUTCDATE()), 
+    [CreatedBy] NVARCHAR(50) NULL , 
 )

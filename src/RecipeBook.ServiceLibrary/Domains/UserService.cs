@@ -2,12 +2,14 @@
 using Microsoft.IdentityModel.Tokens;
 using RecipeBook.ServiceLibrary.Entities;
 using RecipeBook.ServiceLibrary.Models;
+using RecipeBook.ServiceLibrary.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RecipeBook.ServiceLibrary.Domains
 {
@@ -20,17 +22,38 @@ namespace RecipeBook.ServiceLibrary.Domains
 
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
+        // users hardcoded for simplicity, store in a db with hashed passwords in production application
         private List<UserEntity> _users = new List<UserEntity>
         {
-            new UserEntity { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
+            new UserEntity { Id = 1, Username = "test", Password = "test" }
         };
 
         private readonly string _jwtSecret;
+        private readonly UserRepository _userRepository;
 
         public UserService(IConfiguration configuration)
         {
             _jwtSecret = configuration.GetSection("JWT")["Secret"];
+            _userRepository = new UserRepository(configuration);
+        }
+
+        public async Task<UserEntity> RegisterUser(RegisterRequest model)
+        {
+            UserEntity user = new UserEntity();
+
+            try
+            {
+                user.Id = 3;
+                user.Username = model.Username;
+                user.Password = generateHash(model.Password);
+                await _userRepository.InsertAsync(user);
+                return user;
+            } catch (Exception e)
+            {
+                throw e;
+            }
+
+            
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -57,7 +80,6 @@ namespace RecipeBook.ServiceLibrary.Domains
         }
 
         // helper methods
-
         private string generateJwtToken(UserEntity user)
         {
             // generate token that is valid for 7 days
@@ -71,6 +93,11 @@ namespace RecipeBook.ServiceLibrary.Domains
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+        private string generateHash(string password)
+        {
+
+            return "hash";
         }
     }
 }
