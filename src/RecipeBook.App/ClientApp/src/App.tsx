@@ -23,21 +23,47 @@ import RegisterPage from "./pages/RegisterPage";
 interface Props {}
 
 interface State {
-  recipes: Recipe[];
+  token: string | null;
 }
 
 export default class App extends Component<Props, State> {
   static displayName = App.name;
 
-  componentDidMount() {
-    //
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      token: null,
+    };
   }
+
+  componentDidMount() {
+    this.setState({
+      token: localStorage.getItem("token"),
+    });
+  }
+
+  handleLogOut = () => {
+    localStorage.removeItem("token");
+    this.setState({
+      token: null,
+    });
+  };
+  handleLogIn = (token: string) => {
+    localStorage.setItem("token", token);
+    this.setState({
+      token: token,
+    });
+  };
 
   render() {
     return (
-      <Layout>
+      <Layout token={this.state.token} onLogOut={this.handleLogOut}>
         <Switch>
-          <Route exact path="/" component={() => <WelcomePage />} />
+          <Route
+            exact
+            path="/"
+            component={() => <WelcomePage onLogIn={this.handleLogIn} />}
+          />
           <Route path="/register" component={() => <RegisterPage />} />
           <Route path="/recipes" component={() => <RecipesPage />} />
           <Route path="/view/:id" component={() => <ViewRecipe />} />

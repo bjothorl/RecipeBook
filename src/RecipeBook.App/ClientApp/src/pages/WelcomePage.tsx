@@ -10,10 +10,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { loginUser } from "../utility/Api/user";
 import { AxiosResponse } from "axios";
+import { OutlinedFlagOutlined } from "@mui/icons-material";
 
-interface Props {}
+interface Props {
+  onLogIn: (token: string) => void;
+}
 
-export default function WelcomePage(props: Props): ReactElement {
+export default function WelcomePage({ onLogIn }: Props): ReactElement {
   const [username, setUsername] = useState<String>("");
   const [password, setPassword] = useState<String>("");
   let history = useHistory();
@@ -67,6 +70,7 @@ export default function WelcomePage(props: Props): ReactElement {
       { Username: username, Password: password },
       (res: AxiosResponse<any>) => {
         if (res && res.status == 200) {
+          onLogIn(res.data.token);
           history.push("/recipes");
         } else {
           console.log(res.status);

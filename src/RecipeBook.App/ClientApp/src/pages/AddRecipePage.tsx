@@ -31,7 +31,7 @@ export default function AddRecipePage({}: Props): ReactElement {
     } as Recipe;
 
     postRecipe(data, (res: any) => {
-      console.log(res);
+      history.push("/recipes");
     });
   };
 

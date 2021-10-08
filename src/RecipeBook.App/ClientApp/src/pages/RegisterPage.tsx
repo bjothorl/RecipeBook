@@ -69,7 +69,6 @@ export default function RegisterPage({}: Props): ReactElement {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // setEmailSent(true);
 
     registerUser(
       { Username: username, Password: password },
@@ -95,70 +94,29 @@ export default function RegisterPage({}: Props): ReactElement {
             {error}
           </Typography>
         )}
-        {!emailSent ? (
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <FormGroup>
-              {/* <TextField
-                key={0}
-                id="outlined-basic"
-                label="email"
-                variant="outlined"
-                style={styles.textField}
-                onChange={(e) => setEmail(e.target.value)}
-              /> */}
-              <TextField
-                key={1}
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
-                style={styles.textField}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <TextField
-                key={2}
-                id="outlined-basic"
-                label="password"
-                variant="outlined"
-                style={styles.textField}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button type="submit" style={styles.button} variant="contained">
-                register
-              </Button>
-            </FormGroup>
-          </form>
-        ) : (
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <Box sx={styles.title}>
-              <Typography>
-                We've sent you an authorisation code on mail.
-              </Typography>
-              <Typography>Type it here:</Typography>
-            </Box>
-            <FormGroup>
-              <TextField
-                key={3}
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
-                style={styles.textField}
-                defaultValue={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <TextField
-                key={4}
-                id="outlined-basic"
-                label="verification code"
-                variant="outlined"
-                style={styles.textField}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-              <Button type="submit" style={styles.button} variant="contained">
-                confirm
-              </Button>
-            </FormGroup>
-          </form>
-        )}
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <FormGroup>
+            <TextField
+              key={1}
+              id="outlined-basic"
+              label="username"
+              variant="outlined"
+              style={styles.textField}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              key={2}
+              id="outlined-basic"
+              label="password"
+              variant="outlined"
+              style={styles.textField}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" style={styles.button} variant="contained">
+              register
+            </Button>
+          </FormGroup>
+        </form>
       </Box>
     </Box>
   );

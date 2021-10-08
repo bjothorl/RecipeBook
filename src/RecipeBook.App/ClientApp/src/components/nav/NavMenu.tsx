@@ -13,7 +13,10 @@ import Typography from "@mui/material/Typography";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import "./NavMenu.css";
 
-interface Props {}
+interface Props {
+  token: String | null;
+  onLogOut: () => void;
+}
 interface State {
   collapsed: boolean;
 }
@@ -29,7 +32,6 @@ export default class NavMenu extends Component<Props, State> {
       collapsed: true,
     };
   }
-
   toggleNavbar() {
     this.setState({
       collapsed: !this.state.collapsed,
@@ -61,6 +63,20 @@ export default class NavMenu extends Component<Props, State> {
                     </Typography>
                   </NavLink>
                 </NavItem>
+                {this.props.token && (
+                  <NavItem>
+                    <NavLink
+                      tag={Link}
+                      className="text-light"
+                      to="/"
+                      onClick={this.props.onLogOut}
+                    >
+                      <Typography variant="h6" gutterBottom component="div">
+                        LOG OUT
+                      </Typography>
+                    </NavLink>
+                  </NavItem>
+                )}
               </ul>
             </Collapse>
           </Container>

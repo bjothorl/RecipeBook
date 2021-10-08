@@ -18,7 +18,10 @@ const theme = createTheme({
   },
 });
 
-interface Props {}
+interface Props {
+  token: string | null;
+  onLogOut: () => void;
+}
 interface State {}
 
 export default class Layout extends Component<Props, State> {
@@ -35,7 +38,7 @@ export default class Layout extends Component<Props, State> {
         }}
       >
         <ThemeProvider theme={theme}>
-          <NavMenu />
+          <NavMenu token={this.props.token} onLogOut={this.props.onLogOut} />
           {this.props.children}
         </ThemeProvider>
       </div>

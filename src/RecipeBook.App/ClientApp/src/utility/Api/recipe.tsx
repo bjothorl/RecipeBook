@@ -6,18 +6,15 @@ let connStr = "https://localhost:44373/api/recipe/";
 function auth() {
   let token = localStorage.getItem("token");
   if (token === null) {
-    return null;
+    return "";
   } else return token;
 }
 
 function getRecipes(callback: Function): void {
-  let token = auth();
-  if (!token) return;
-
   axios
     .get(connStr, {
       headers: {
-        Authorization: token,
+        Authorization: auth(),
       },
     })
     .then((res) => {
@@ -27,13 +24,10 @@ function getRecipes(callback: Function): void {
 }
 
 function getRecipe(recipeId: string, callback: Function): void {
-  let token = auth();
-  if (!token) return;
-
   axios
     .get(connStr + recipeId, {
       headers: {
-        Authorization: token,
+        Authorization: auth(),
       },
     })
     .then((res) => {
@@ -43,13 +37,10 @@ function getRecipe(recipeId: string, callback: Function): void {
 }
 
 function postRecipe(data: Recipe, callback: Function) {
-  let token = auth();
-  if (!token) return;
-
   axios
     .post(connStr, data, {
       headers: {
-        Authorization: token,
+        Authorization: auth(),
       },
     })
     .then((res) => {
@@ -61,13 +52,10 @@ function postRecipe(data: Recipe, callback: Function) {
 }
 
 function editRecipe(data: Recipe, callback: Function) {
-  let token = auth();
-  if (!token) return;
-
   axios
     .put(connStr, data, {
       headers: {
-        Authorization: token,
+        Authorization: auth(),
       },
     })
     .then((res) => {
@@ -79,13 +67,10 @@ function editRecipe(data: Recipe, callback: Function) {
 }
 
 function deleteRecipe(recipeId: string, callback: Function): void {
-  let token = auth();
-  if (!token) return;
-
   axios
     .delete(connStr + recipeId, {
       headers: {
-        Authorization: token,
+        Authorization: auth(),
       },
     })
     .then((res) => {

@@ -7,7 +7,6 @@ function loginUser(data: any, callback: Function) {
     .post(connStr + "/authenticate", data)
     .then((res: AxiosResponse<any>) => {
       callback(res);
-      localStorage.setItem("token", res.data.token);
     })
     .catch((err: AxiosError) => {
       callback(err.response);
