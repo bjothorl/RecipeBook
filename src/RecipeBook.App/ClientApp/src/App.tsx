@@ -1,17 +1,18 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
-
+import {
+  Redirect,
+  Route,
+  RouteComponentProps,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 import "./custom.css";
 import Layout from "./components/Layout";
-import fakeData from "./assets/fakeData.json";
-import { Recipe } from "./Types";
-
 // fonts
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
 //components
 import WelcomePage from "./pages/WelcomePage";
 import RecipesPage from "./pages/RecipesPage";
@@ -26,10 +27,10 @@ interface State {
   token: string | null;
 }
 
-export default class App extends Component<Props, State> {
+class App extends Component<Props & RouteComponentProps<{}>, State> {
   static displayName = App.name;
 
-  constructor(props: Props) {
+  constructor(props: Props & RouteComponentProps<{}>) {
     super(props);
     this.state = {
       token: null,
@@ -37,9 +38,14 @@ export default class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.setState({
-      token: localStorage.getItem("token"),
-    });
+    let token = localStorage.getItem("token");
+    if (!token) {
+      this.props.history.push("/");
+    } else {
+      this.setState({
+        token: localStorage.getItem("token"),
+      });
+    }
   }
 
   handleLogOut = () => {
@@ -74,3 +80,5 @@ export default class App extends Component<Props, State> {
     );
   }
 }
+
+export default withRouter(App);

@@ -6,6 +6,7 @@ import { Recipe } from "../Types";
 
 import RecipeCheckboxItem from "../components/RecipeCheckboxItem";
 import { getRecipe } from "../utility/Api/recipe";
+import { AxiosResponse } from "axios";
 
 export default function ViewRecipe(): ReactElement {
   let { id } = useParams<{ id: string }>();
@@ -14,8 +15,12 @@ export default function ViewRecipe(): ReactElement {
   // const recipe = recipes.find((r: Recipe) => r.id === id);
 
   useEffect(() => {
-    getRecipe(id, (res: Recipe) => {
-      setRecipe(res);
+    getRecipe(id, (res: AxiosResponse<any>) => {
+      if (res && res.status == 200) {
+        setRecipe(res.data as Recipe);
+      } else {
+        history.push("/");
+      }
     });
   }, []);
 

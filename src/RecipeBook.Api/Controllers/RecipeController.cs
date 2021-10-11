@@ -22,7 +22,6 @@ namespace RecipeBook.Api.Controllers
 
         public RecipeController(IConfiguration configuration)
         {
-            // the configuration dependency injection is automatically defaulted to appsettings.json 
             _recipeService = new RecipeService(configuration);
         }
 
@@ -36,8 +35,7 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                string[] arr = { "ERR", e.Message };
-                return Ok(arr);
+                return BadRequest(new { message = e.Message });
             }
         }
 
@@ -52,8 +50,7 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                string[] arr = { "ERR", e.Message };
-                return Ok(arr);
+                return BadRequest(new { message = e.Message });
             }
         }
 
@@ -68,8 +65,7 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                string[] arr = { "ERR", e.Message };
-                return Ok(arr);
+                return BadRequest(new { message = e.Message });
             }
             
         }
@@ -91,8 +87,7 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                string[] arr = { "ERR", e.Message };
-                return Ok(arr);
+                return BadRequest(new { message = e.Message });
             }
             
         }
@@ -108,8 +103,7 @@ namespace RecipeBook.Api.Controllers
             }
             catch (Exception e)
             {
-                string[] arr = { "ERR", e.Message };
-                return Ok(arr);
+                return BadRequest(new { message = e.Message });
             }
         }
     }

@@ -13,12 +13,13 @@ import { useHistory } from "react-router-dom";
 interface Props {}
 
 export default function RegisterPage({}: Props): ReactElement {
-  const [email, setEmail] = useState<String>("");
   const [username, setUsername] = useState<String>("");
   const [password, setPassword] = useState<String>("");
   const [error, setError] = useState<String>("");
   let history = useHistory();
 
+  // for verification
+  const [email, setEmail] = useState<String>("");
   const [emailSent, setEmailSent] = useState<Boolean>(false);
   const [verificationCode, setVerificationCode] = useState<String>("");
 

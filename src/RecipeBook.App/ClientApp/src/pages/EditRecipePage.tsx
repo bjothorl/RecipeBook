@@ -5,16 +5,23 @@ import { useHistory } from "react-router-dom";
 import { Recipe } from "../Types";
 import RecipeForm from "../components/RecipeForm/RecipeForm";
 import { getRecipe, editRecipe, deleteRecipe } from "../utility/Api/recipe";
+import { AxiosResponse } from "axios";
+import RecipeFormDialog from "../components/RecipeForm/RecipeFormDialog";
 
 export default function EditRecipePage(): ReactElement {
   const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<Recipe | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   let history = useHistory();
 
   useEffect(() => {
-    getRecipe(id, (res: Recipe) => {
-      setRecipe(res);
+    getRecipe(id, (res: AxiosResponse<any>) => {
+      if (res && res.status == 200) {
+        setRecipe(res.data as Recipe);
+      } else {
+        history.push("/");
+      }
     });
   }, []);
 
@@ -53,17 +60,26 @@ export default function EditRecipePage(): ReactElement {
       } as Recipe;
     }
 
-    editRecipe(data, (res: any) => {
-      console.log(res);
-      history.push("/view/" + recipe?.id);
+    editRecipe(data, (res: AxiosResponse<any>) => {
+      if (res && res.status == 200) {
+        history.push("/view/" + recipe?.id);
+      } else {
+        setLoading(false);
+        setError(res.data.message);
+      }
     });
   };
 
   const handleDelete = () => {
+    setLoading(true);
     if (recipe)
-      deleteRecipe(recipe?.id, (res: any) => {
-        console.log(res);
-        history.push("/recipes");
+      deleteRecipe(recipe?.id, (res: AxiosResponse<any>) => {
+        if (res && res.status == 200) {
+          history.push("/recipes");
+        } else {
+          setLoading(false);
+          setError(res.data.message);
+        }
       });
   };
 
@@ -80,8 +96,10 @@ export default function EditRecipePage(): ReactElement {
             onSubmit={handleSubmit}
             onDelete={handleDelete}
             type={"edit"}
+            error={error}
           />
         </Box>
+        <RecipeFormDialog title={"Loading..."} open={loading} />
       </Box>
     );
   else return <>no recipe</>;

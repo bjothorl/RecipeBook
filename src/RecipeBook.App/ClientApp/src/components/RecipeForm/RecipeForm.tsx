@@ -17,6 +17,7 @@ import RecipeFormDialog from "./RecipeFormDialog";
 interface Props {
   recipe?: Recipe;
   type: string;
+  error?: string;
   onUpdateRecipe: (recipe: Recipe) => void;
   onSubmit: (e: FormEvent, blob: any) => void;
   onDelete: MouseEventHandler<HTMLButtonElement>;
@@ -44,6 +45,7 @@ export default function RecipeForm({
   onUpdateRecipe,
   onSubmit,
   onDelete,
+  error,
 }: Props): ReactElement {
   const history = useHistory();
   const [ingredientKeys, setIngredientKeys] = useState<string[]>(
@@ -78,6 +80,12 @@ export default function RecipeForm({
       flex: 1,
       margin: "0.5em",
     },
+    error: {
+      width: "70%",
+      textAlign: "center",
+      marginTop: "2em",
+      alignSelf: "center",
+    },
   } as const;
 
   const handleCloseDialog = (e: any) => {
@@ -98,10 +106,6 @@ export default function RecipeForm({
         setImageBlob(e.target?.result);
       });
     }
-
-    // if this doesnt work, use dropzone
-    // https://www.npmjs.com/package/react-dropzone
-    // https://github.com/bjothorl/opvind-edc-gade-cms/blob/master/client/src/components/DropZone.js
   };
 
   const handleRemoveIngredient = (
@@ -252,6 +256,12 @@ export default function RecipeForm({
           instructionKeys={instructionKeys}
         />
 
+        {error && (
+          <Typography style={styles.error} color="red">
+            {error}
+          </Typography>
+        )}
+
         <Box sx={styles.buttons}>
           <Button
             style={styles.button}
@@ -260,9 +270,6 @@ export default function RecipeForm({
             onClick={() => setDialogOpen(true)}
           >
             {type == "edit" ? "delete" : "cancel"}
-          </Button>
-          <Button style={styles.button} variant="contained" color="secondary">
-            preview?
           </Button>
           <Button type="submit" style={styles.button} variant="contained">
             save

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-let connStr = "https://localhost:44373/api/user";
+let connStr = "https://localhost:5401/api/user";
 
 function loginUser(data: any, callback: Function) {
   axios

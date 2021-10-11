@@ -4,10 +4,12 @@ import { Box } from "@mui/system";
 import { Recipe } from "../Types";
 import RecipeList from "../components/RecipeList/RecipeList";
 import { getRecipes } from "../utility/Api/recipe";
+import { AxiosResponse } from "axios";
+import { useHistory } from "react-router-dom";
 
 export default function RecipesPage(): ReactElement {
   const [recipes, setRecipes] = useState<Recipe[]>();
-
+  let history = useHistory();
   const styles = {
     container: {
       display: "flex",
@@ -21,8 +23,12 @@ export default function RecipesPage(): ReactElement {
   } as const;
 
   useEffect(() => {
-    getRecipes((res: Recipe[]) => {
-      setRecipes(res);
+    getRecipes((res: AxiosResponse<any>) => {
+      if (res && res.status == 200) {
+        setRecipes(res.data as Recipe[]);
+      } else {
+        history.push("/");
+      }
     });
   }, []);
 

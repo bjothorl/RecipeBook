@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Recipe } from "../../Types";
 
-let connStr = "https://localhost:44373/api/recipe/";
+let connStr = "https://localhost:5401/api/recipe/";
 
 function auth() {
   let token = localStorage.getItem("token");
@@ -17,10 +17,12 @@ function getRecipes(callback: Function): void {
         Authorization: auth(),
       },
     })
-    .then((res) => {
-      callback(res.data);
+    .then((res: AxiosResponse<any>) => {
+      callback(res);
     })
-    .catch((err) => console.log(err));
+    .catch((err: AxiosError) => {
+      callback(err.response);
+    });
 }
 
 function getRecipe(recipeId: string, callback: Function): void {
@@ -30,10 +32,12 @@ function getRecipe(recipeId: string, callback: Function): void {
         Authorization: auth(),
       },
     })
-    .then((res) => {
-      callback(res.data);
+    .then((res: AxiosResponse<any>) => {
+      callback(res);
     })
-    .catch((err) => console.log(err));
+    .catch((err: AxiosError) => {
+      callback(err.response);
+    });
 }
 
 function postRecipe(data: Recipe, callback: Function) {
@@ -43,11 +47,11 @@ function postRecipe(data: Recipe, callback: Function) {
         Authorization: auth(),
       },
     })
-    .then((res) => {
+    .then((res: AxiosResponse<any>) => {
       callback(res);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((err: AxiosError) => {
+      callback(err.response);
     });
 }
 
@@ -58,11 +62,11 @@ function editRecipe(data: Recipe, callback: Function) {
         Authorization: auth(),
       },
     })
-    .then((res) => {
+    .then((res: AxiosResponse<any>) => {
       callback(res);
     })
-    .catch((err) => {
-      console.log("error!", err);
+    .catch((err: AxiosError) => {
+      callback(err.response);
     });
 }
 
@@ -73,11 +77,11 @@ function deleteRecipe(recipeId: string, callback: Function): void {
         Authorization: auth(),
       },
     })
-    .then((res) => {
-      callback(res.data);
+    .then((res: AxiosResponse<any>) => {
+      callback(res);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((err: AxiosError) => {
+      callback(err.response);
     });
 }
 

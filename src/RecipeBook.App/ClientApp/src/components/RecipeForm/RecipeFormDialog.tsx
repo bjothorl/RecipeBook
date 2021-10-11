@@ -9,8 +9,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 interface Props {
   title: string;
   open: boolean;
-  onClose: MouseEventHandler<HTMLButtonElement>;
-  onConfirm: MouseEventHandler<HTMLButtonElement>;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
+  onConfirm?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function AlertDialog({
@@ -32,14 +32,16 @@ export default function AlertDialog({
           {""}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          cancel
-        </Button>
-        <Button onClick={onConfirm} color="primary">
-          confirm
-        </Button>
-      </DialogActions>
+      {onClose && (
+        <DialogActions>
+          <Button onClick={onClose} color="secondary">
+            cancel
+          </Button>
+          <Button onClick={onConfirm} color="primary">
+            confirm
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 }

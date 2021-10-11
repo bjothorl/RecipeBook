@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Recipe } from "../Types";
 import RecipeForm from "../components/RecipeForm/RecipeForm";
 import { postRecipe } from "../utility/Api/recipe";
+import { AxiosResponse } from "axios";
 interface Props {}
 
 export default function AddRecipePage({}: Props): ReactElement {
@@ -30,8 +31,12 @@ export default function AddRecipePage({}: Props): ReactElement {
       logo: blob,
     } as Recipe;
 
-    postRecipe(data, (res: any) => {
-      history.push("/recipes");
+    postRecipe(data, (res: AxiosResponse<any>) => {
+      if (res && res.status == 200) {
+        history.push("/view/" + recipe?.id);
+      } else {
+        history.push("/");
+      }
     });
   };
 
