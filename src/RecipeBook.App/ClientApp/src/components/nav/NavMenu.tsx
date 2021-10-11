@@ -56,6 +56,17 @@ export default class NavMenu extends Component<Props, State> {
               navbar
             >
               <ul className="navbar-nav flex-grow">
+                <NavItem>
+                    <NavLink
+                        tag={Link}
+                        className="text-light"
+                        to="/recipes"
+                    >
+                        <Typography variant="h6" gutterBottom component="div">
+                            RECIPES
+                        </Typography>
+                    </NavLink>
+                </NavItem>
                 {this.props.token && (
                   <NavItem>
                     <NavLink
